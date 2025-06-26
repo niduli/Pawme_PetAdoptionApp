@@ -1,0 +1,56 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_marginBottom="12dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="4dp"
+    android:padding="12dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/dogImage"
+            android:src="@drawable/sample_dog"
+            android:scaleType="centerCrop"
+            android:layout_width="match_parent"
+            android:layout_height="180dp" />
+
+        <TextView
+            android:id="@+id/dogName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/dogInfo"
+            android:text="Age: 2 yrs | Breed: Labrador"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"/>
+
+        <TextView
+            android:id="@+id/dogDuration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Foster Duration: 2 weeks"
+            android:layout_marginTop="4dp"/>
+
+        <TextView
+            android:id="@+id/dogNeeds"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Special Needs: Requires medication"
+            android:layout_marginTop="4dp"/>
+
+        <Button
+            android:id="@+id/btnLearnMore"
+            android:text="Learn More"
+            android:layout_marginTop="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
