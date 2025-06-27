@@ -9,12 +9,24 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.pawmepetadoptionapp.R
 import com.example.pawmepetadoptionapp.model.Dog
 
-class DogAdapter(private val dogs: List<Dog>) : RecyclerView.Adapter<DogAdapter.DogViewHolder>() {
+class DogAdapter(
+    private val dogs: List<Dog>,
+    private val onItemClick: (Dog) -> Unit
+) : RecyclerView.Adapter<DogAdapter.DogViewHolder>() {
 
-    class DogViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class DogViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val dogImage: ImageView = view.findViewById(R.id.dog_image)
         val dogName: TextView = view.findViewById(R.id.dog_name)
         val dogDetails: TextView = view.findViewById(R.id.dog_details)
+
+        init {
+            view.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onItemClick(dogs[position])
+                }
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DogViewHolder {

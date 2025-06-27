@@ -212,7 +212,7 @@
                 android:layout_marginStart="16dp" />
         </LinearLayout>
 
-        <!-- Donator Button -->
+
         <LinearLayout
             android:id="@+id/btnDonator"
             android:layout_width="match_parent"

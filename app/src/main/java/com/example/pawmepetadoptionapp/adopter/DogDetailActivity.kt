@@ -1,11 +1,11 @@
-package com.example.dogadoptionapp
+package com.example.pawmepetadoptionapp.adopter
 
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageButton
-import androidx.appcompat.app.AppCompatActivity
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.example.pawmepetadoptionapp.R
 
 class DogDetailActivity : AppCompatActivity() {
@@ -14,7 +14,6 @@ class DogDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dog_detail)
 
-        // Set views
         val backButton: ImageButton = findViewById(R.id.backButton)
         val dogImage: ImageView = findViewById(R.id.dogImage)
         val dogName: TextView = findViewById(R.id.dogName)
@@ -23,25 +22,29 @@ class DogDetailActivity : AppCompatActivity() {
         val vaccinationBtn: Button = findViewById(R.id.vaccinationBtn)
         val adoptBtn: Button = findViewById(R.id.adoptBtn)
 
-        // Back button click
+        // Get data from Intent
+        val name = intent.getStringExtra("name")
+        val ageBreed = intent.getStringExtra("ageBreed")
+        val imageResId = intent.getIntExtra("imageResId", -1)
+
+        // Set values to views
+        dogName.text = name
+        dogBreed.text = ageBreed
+        if (imageResId != -1) {
+            dogImage.setImageResource(imageResId)
+        }
+        description.text = "$name is a loving and loyal companion looking for a forever home. $ageBreed and full of joy!"
+
         backButton.setOnClickListener {
             finish()
         }
 
-        // Example: set data manually (later connect to real data or intent extras)
-        dogName.text = "Shaggy"
-        dogBreed.text = "Cocker Spaniel"
-        description.text = "Shaggy is a gentle Cocker Spaniel who loves walks, cuddles, and being your loyal shadow. She's looking for her forever home!"
-
-        // TODO: Set image with dogImage.setImageResource(R.drawable.shaggy)
-
-
         vaccinationBtn.setOnClickListener {
-            // Open vaccination history
+            // Future feature: Show vaccination history
         }
 
         adoptBtn.setOnClickListener {
-            // Handle adopt action
+            // Future feature: Handle adoption
         }
     }
 }
