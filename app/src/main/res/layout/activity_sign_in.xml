@@ -1,10 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignInActivity">
+    android:background="#FAFAFA"
+    android:fillViewport="true">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center_horizontal">
+
+        <!-- Dog Image -->
+        <ImageView
+            android:id="@+id/dogImage"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:src="@drawable/signin"
+            android:contentDescription="Dog"
+            android:layout_marginTop="16dp" />
+
+        <!-- Container Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_white_card"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:layout_marginTop="-20dp"
+            android:elevation="4dp">
+
+            <!-- Sign In Heading -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sign In"
+                android:textColor="#689BFF"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif"
+                android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Back for more tail wags?"
+                android:textColor="#666666"
+                android:textSize="14sp"
+                android:fontFamily="sans-serif"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Email Field -->
+            <EditText
+                android:id="@+id/emailField"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="Email"
+                android:drawableStart="@drawable/mail"
+                android:background="@drawable/rounded_edittext"
+                android:paddingStart="12dp"
+                android:fontFamily="sans-serif"
+                android:textColor="#000000"
+                android:textColorHint="#888888"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Password Field -->
+            <EditText
+                android:id="@+id/passwordField"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:drawableStart="@drawable/padlock"
+                android:drawableEnd="@drawable/visible"
+                android:background="@drawable/rounded_edittext"
+                android:paddingStart="12dp"
+                android:fontFamily="sans-serif"
+                android:textColor="#000000"
+                android:textColorHint="#888888"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Remember & Forgot Password -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="16dp">
+
+                <CheckBox
+                    android:id="@+id/rememberCheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Remember Password"
+                    android:fontFamily="sans-serif"
+                    android:textColor="#444444" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/forgotPasswordText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Forgot Password ?"
+                    android:textSize="13sp"
+                    android:fontFamily="sans-serif"
+                    android:textColor="#888888" />
+            </LinearLayout>
+
+            <!-- Sign In Button -->
+            <Button
+                android:id="@+id/signInBtn"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="Sign In"
+                android:fontFamily="sans-serif"
+                android:textSize="16sp"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#222222"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Sign Up Redirect -->
+            <TextView
+                android:id="@+id/signUpText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Don’t have an account? Sign Up"
+                android:textSize="14sp"
+                android:fontFamily="sans-serif"
+                android:textColor="#444444"
+                android:layout_gravity="center_horizontal" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

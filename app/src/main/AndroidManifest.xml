@@ -13,21 +13,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PawmePetAdoptionApp"
         tools:targetApi="31">
-
-        <!-- Launch GetStartActivity first -->
+        <activity
+            android:name=".SignUpActivity"
+            android:exported="false" />
+        <activity
+            android:name=".HomeActivity"
+            android:exported="false" /> <!-- Launch GetStartActivity first -->
         <activity
             android:name=".GetStartActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".SignInActivity"
             android:exported="false" />
-
         <activity
             android:name=".MainActivity"
             android:exported="false" />
