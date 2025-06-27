@@ -1,14 +1,10 @@
 package com.example.pawmepetadoptionapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
 import android.view.MotionEvent
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 
@@ -27,7 +23,7 @@ class SignUpActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_sign_up)  // Make sure your layout file is named activity_sign_up.xml
+        setContentView(R.layout.activity_sign_up)
 
         usernameField = findViewById(R.id.usernameField)
         emailField = findViewById(R.id.emailField)
@@ -37,16 +33,15 @@ class SignUpActivity : AppCompatActivity() {
         signUpBtn = findViewById(R.id.signUpBtn)
         signInText = findViewById(R.id.signInText)
 
-        val roles = listOf("Admin", "Adopter", "Foster", "Volunteer", "Donor")
+        val roles = listOf("Adopter", "Foster", "Volunteer", "Donor")
         val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, roles)
         roleField.setAdapter(adapter)
 
-        // Setup password visibility toggle for passwordField
         passwordField.setOnTouchListener { _, event ->
             if (event.action == MotionEvent.ACTION_UP) {
                 val drawableEnd = 2
-                if (passwordField.compoundDrawables[drawableEnd] != null) {
-                    val bounds = passwordField.compoundDrawables[drawableEnd].bounds
+                passwordField.compoundDrawables[drawableEnd]?.let { drawable ->
+                    val bounds = drawable.bounds
                     if (event.rawX >= (passwordField.right - bounds.width())) {
                         passwordVisible = !passwordVisible
                         togglePasswordVisibility(passwordField, passwordVisible, R.drawable.lock1)
@@ -57,12 +52,11 @@ class SignUpActivity : AppCompatActivity() {
             false
         }
 
-        // Setup password visibility toggle for confirmPasswordField
         confirmPasswordField.setOnTouchListener { _, event ->
             if (event.action == MotionEvent.ACTION_UP) {
                 val drawableEnd = 2
-                if (confirmPasswordField.compoundDrawables[drawableEnd] != null) {
-                    val bounds = confirmPasswordField.compoundDrawables[drawableEnd].bounds
+                confirmPasswordField.compoundDrawables[drawableEnd]?.let { drawable ->
+                    val bounds = drawable.bounds
                     if (event.rawX >= (confirmPasswordField.right - bounds.width())) {
                         confirmPasswordVisible = !confirmPasswordVisible
                         togglePasswordVisibility(confirmPasswordField, confirmPasswordVisible, R.drawable.lock2)
@@ -95,14 +89,19 @@ class SignUpActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // TODO: Implement Firebase sign-up logic here
+            // TODO: Firebase Sign-Up Logic here
 
             Toast.makeText(this, "Sign-up successful!", Toast.LENGTH_SHORT).show()
+
+            // Redirect to SignInActivity after successful signup
+            val intent = Intent(this, SignInActivity::class.java)
+            startActivity(intent)
+            finish()
         }
 
         signInText.setOnClickListener {
-            // TODO: Implement navigation to SignInActivity
-            Toast.makeText(this, "Redirecting to Sign In...", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, SignInActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -110,9 +109,9 @@ class SignUpActivity : AppCompatActivity() {
         if (isVisible) {
             editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
             editText.setCompoundDrawablesWithIntrinsicBounds(
-                ContextCompat.getDrawable(this, lockDrawableId),  // left icon (lock)
+                ContextCompat.getDrawable(this, lockDrawableId),
                 null,
-                ContextCompat.getDrawable(this, R.drawable.visible),  // visible eye icon
+                ContextCompat.getDrawable(this, R.drawable.visible),
                 null
             )
         } else {
@@ -120,11 +119,10 @@ class SignUpActivity : AppCompatActivity() {
             editText.setCompoundDrawablesWithIntrinsicBounds(
                 ContextCompat.getDrawable(this, lockDrawableId),
                 null,
-                ContextCompat.getDrawable(this, R.drawable.visibility_off),  // hidden eye icon
+                ContextCompat.getDrawable(this, R.drawable.visibility_off),
                 null
             )
         }
-        // Keep cursor at the end of text
         editText.setSelection(editText.text.length)
     }
 }
