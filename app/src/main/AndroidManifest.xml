@@ -16,7 +16,7 @@
 
         <!-- SignUpActivity is now the launcher activity -->
         <activity
-            android:name=".SignUpActivity"
+            android:name=".SignInActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,7 +26,7 @@
 
         <activity android:name=".GetStartActivity" android:exported="false" />
         <activity android:name=".HomeActivity" android:exported="false" />
-        <activity android:name=".SignInActivity" android:exported="false" />
+        <activity android:name=".SignUpActivity" android:exported="false" />
         <activity android:name=".MainActivity" android:exported="false" />
 
     </application>
