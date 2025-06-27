@@ -13,18 +13,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PawmePetAdoptionApp"
         tools:targetApi="31">
-
+        <activity
+            android:name=".adopter.activity_dog_detail"
+            android:exported="false" />
         <!-- Main launcher activity -->
         <activity
             android:name=".adopter.AdoptionActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- Adoption activity -->
+        </activity> <!-- Adoption activity -->
         <activity
             android:name=".MainActivity"
             android:exported="true" />
