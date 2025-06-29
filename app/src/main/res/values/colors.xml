@@ -12,6 +12,7 @@
 
     <!-- Text and UI helpers -->
     <color name="textPrimary">#333333</color>
+    <color name="purple_500">#6200EE</color>
     <color name="textSecondary">#666666</color>
     <color name="textHint">#AAAAAA</color>
 

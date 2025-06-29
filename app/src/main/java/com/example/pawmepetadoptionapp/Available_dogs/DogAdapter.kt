@@ -1,15 +1,14 @@
 package com.example.pawmepetadoptionapp
 
-import android.content.Intent
+import DogProfileDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-
-
 
 class DogAdapter(private val dogs: List<Dog>) : RecyclerView.Adapter<DogAdapter.DogViewHolder>() {
 
@@ -27,18 +26,19 @@ class DogAdapter(private val dogs: List<Dog>) : RecyclerView.Adapter<DogAdapter.
     override fun onBindViewHolder(holder: DogViewHolder, position: Int) {
         val dog = dogs[position]
         holder.dogName.text = dog.name
-        holder.dogImage.setImageResource(dog.imageResId)// static for now
+        holder.dogImage.setImageResource(dog.imageResId) // static for now
 
         holder.learnMore.setOnClickListener {
-            val context = holder.itemView.context
-            val intent = Intent(context, DogProfileActivity::class.java)
-            intent.putExtra("DOG_NAME", dog.name)
-            intent.putExtra("DOG_BREED", dog.breed)
-            intent.putExtra("DOG_AGE", dog.age)
-            intent.putExtra("DOG_DURATION", dog.duration)
-            intent.putExtra("DOG_NEEDS", dog.needs)
-            intent.putExtra("DOG_IMAGE", dog.imageResId)
-            context.startActivity(intent)
+            val activity = holder.itemView.context as? AppCompatActivity
+            if (activity != null) {
+                val dialog = DogProfileDialog(dog) { selectedDog ->
+                    // Handle "Choose Fostering" click here, e.g.:
+                    // Toast.makeText(activity, "${selectedDog.name} chosen for fostering!", Toast.LENGTH_SHORT).show()
+                }
+                dialog.show(activity.supportFragmentManager, "DogProfileDialog")
+            } else {
+                // Optionally handle the error if context is not an AppCompatActivity
+            }
         }
     }
 
