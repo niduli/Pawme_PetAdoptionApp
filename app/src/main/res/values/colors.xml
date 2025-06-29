@@ -1,5 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Core App Colors -->
+    <color name="colorPrimary">#7B61FF</color> <!-- main purple -->
+    <color name="colorPrimaryDark">#5A45D3</color>
+    <color name="colorAccent">#FFB300</color> <!-- yellow accent -->
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
+
+    <!-- Toolbar Background -->
+    <color name="toolbarBackground">#F3EAFD</color> <!-- very light purple -->
+
+    <!-- Text and UI helpers -->
+    <color name="textPrimary">#333333</color>
+    <color name="textSecondary">#666666</color>
+    <color name="textHint">#AAAAAA</color>
+
+    <!-- Card backgrounds -->
+    <color name="cardBackground">#FAFAFA</color>
+    <color name="cardShadow">#E0E0E0</color>
+
+    <!-- Error / Warning -->
+    <color name="errorRed">#E53935</color>
+    <color name="warningYellow">#FFB74D</color>
 </resources>
