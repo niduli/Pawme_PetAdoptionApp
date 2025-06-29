@@ -1,9 +1,10 @@
-package com.example.pawme.My_foster
+package com.example.pawmepetadoptionapp.FosterDogs
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -13,11 +14,13 @@ import com.example.pawmepetadoptionapp.R
 
 class CurrentFostersFragment : Fragment() {
 
-    data class FosterDog(val name: String, val daysLeft: Int)
+    data class FosterDog(val name: String, val daysLeft: Int, val imageResId: Int)
 
     private val fosterList = listOf(
-        FosterDog("Bella", 5),
-        FosterDog("Max", 2)
+        FosterDog("Milo", 5, R.drawable.milo),
+        FosterDog("Mochi", 22, R.drawable.mochi)
+
+
     )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -35,6 +38,7 @@ class CurrentFostersFragment : Fragment() {
                 val view = holder.itemView
                 view.findViewById<TextView>(R.id.txtName).text = dog.name
                 view.findViewById<TextView>(R.id.txtDaysRemaining).text = "Foster days remaining: ${dog.daysLeft}"
+                view.findViewById<ImageView>(R.id.imageDog).setImageResource(dog.imageResId)
                 view.findViewById<Button>(R.id.btnExtend).setOnClickListener {
                     Toast.makeText(context, "Extend requested for ${dog.name}", Toast.LENGTH_SHORT).show()
                 }
