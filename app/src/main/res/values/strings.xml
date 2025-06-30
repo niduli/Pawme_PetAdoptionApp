@@ -1,3 +1,86 @@
-<resources>
-    <string name="app_name">PawmePetAdoptionApp</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <string name="app_name">Pawmepetadoption</string>
+    <string name="task_title">Task Title</string>
+    <string name="location">Location</string>
+    <string name="time">Time</string>
+    <string name="duration">Duration</string>
+    <string name="urgency">Urgency</string>
+    <string name="apply">Apply</string>
+
+    <string name="feeding">Feeding</string>
+    <string name="transport">Transport</string>
+    <string name="grooming">Grooming</string>
+    <string name="medical">Medical</string>
+    <string name="events">Events</string>
+
+
+    <string name="logo_description">App logo</string>
+
+    <string name="search_hint">Search tasks by type, location...</string>
+
+    <string name="task_list">List of available volunteer tasks</string>
+
+    <string name="task_time">Time: %1$s</string>
+    <string name="task_location">Location: %1$s</string>
+    <string name="task_status">Status: %1$s</string>
+
+    <string name="cancel">Cancel</string>
+    <string name="start">Start</string>
+    <string name="complete">Complete</string>
+
+    <string name="logo_description" tools:ignore="DuplicateDefinition">App logo</string>
+    <string name="my_schedule">My Schedule</string>
+
+    <string name="schedule_list_description">List of scheduled volunteer tasks</string>
+
+    <string name="task_name">Task Name</string>
+    <string name="task_time_sample">Time: 8:00 AM</string> <!-- for preview only -->
+    <string name="task_location_sample">Location: Colombo</string> <!-- for preview only -->
+    <string name="task_status_sample">Status: Confirmed</string> <!-- for preview only -->
+
+    <!-- Volunteer Task Adapter Texts -->
+    <string name="location_label">Location: %1$s</string>
+    <string name="time_label">Time: %1$s</string>
+    <string name="duration_label">Duration: %1$s</string>
+    <string name="task_detail_description">This task involves helping at the shelter with %1$s.\nPlease be on time.</string>
+    <string name="required_skills_label">Required skills: General volunteer experience</string>
+    <string name="task_added_to_schedule">Task Added to Your Schedule</string>
+
+    <string name="task_title_label">Task Title</string>
+    <string name="description_label">Description</string>
+    <string name="required_skills_label" tools:ignore="DuplicateDefinition">Required Skills</string>
+    <string name="location_label_simple">Location</string>
+    <string name="confirm_application">Confirm Application</string>
+
+
+    <string name="search_icon">Search icon</string>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </resources>
