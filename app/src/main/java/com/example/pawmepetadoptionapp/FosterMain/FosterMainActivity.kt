@@ -1,13 +1,16 @@
 package com.example.pawmepetadoptionapp.Main
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageView
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.example.pawmepetadoptionapp.FosterDogs.MyFostersFragment
 import com.example.pawmepetadoptionapp.AvailableDogsFragment
-import com.example.pawmepetadoptionapp.DummyFragment
+import com.example.pawmepetadoptionapp.FosterDogs.MyFostersFragment
+import com.example.pawmepetadoptionapp.FosterLoginActivity
 import com.example.pawmepetadoptionapp.Profile.FosterProfileFragment
 import com.example.pawmepetadoptionapp.R
 import com.example.pawmepetadoptionapp.Vaccination.VaccinationTrackerFragment
@@ -19,7 +22,6 @@ class FosterMainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_foster_main)
 
-        // Setup Bottom Navigation
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNav.setOnItemSelectedListener {
             when (it.itemId) {
@@ -31,21 +33,15 @@ class FosterMainActivity : AppCompatActivity() {
             true
         }
 
-        // Load default fragment
         loadFragment(AvailableDogsFragment())
 
-        // Setup Toolbar icons
         val menuIcon = findViewById<ImageView>(R.id.menuIcon)
         val logoIcon = findViewById<ImageView>(R.id.logoIcon)
 
-        menuIcon.setOnClickListener {
-            Toast.makeText(this, "Menu icon clicked", Toast.LENGTH_SHORT).show()
-            // Optional: Open a navigation drawer or dialog
-        }
+        menuIcon.setOnClickListener { showPopupMenu(it) }
 
         logoIcon.setOnClickListener {
             Toast.makeText(this, "App logo clicked", Toast.LENGTH_SHORT).show()
-            // Optional: Redirect to home or show info
         }
     }
 
@@ -53,5 +49,37 @@ class FosterMainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.nav_host_fragment, fragment)
             .commit()
+    }
+
+    private fun showPopupMenu(view: View) {
+        val popup = PopupMenu(this, view)
+        popup.menuInflater.inflate(R.menu.menu_toolbar_dropdown, popup.menu)
+
+        popup.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.action_logout -> {
+                    Toast.makeText(this, "Logging out...", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, FosterLoginActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                    true
+                }
+
+                else -> false
+            }
+        }
+
+        // Show icons in popup menu using reflection
+        try {
+            val field = popup.javaClass.getDeclaredField("mPopup")
+            field.isAccessible = true
+            val menuPopupHelper = field.get(popup)
+            val setForceIcons = menuPopupHelper.javaClass.getMethod("setForceShowIcon", Boolean::class.java)
+            setForceIcons.invoke(menuPopupHelper, true)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        popup.show()
     }
 }
