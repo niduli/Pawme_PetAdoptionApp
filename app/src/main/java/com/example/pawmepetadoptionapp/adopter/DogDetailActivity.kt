@@ -1,5 +1,6 @@
 package com.example.pawmepetadoptionapp.adopter
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageButton
@@ -22,29 +23,26 @@ class DogDetailActivity : AppCompatActivity() {
         val vaccinationBtn: Button = findViewById(R.id.vaccinationBtn)
         val adoptBtn: Button = findViewById(R.id.adoptBtn)
 
-        // Get data from Intent
         val name = intent.getStringExtra("name")
         val ageBreed = intent.getStringExtra("ageBreed")
         val imageResId = intent.getIntExtra("imageResId", -1)
 
-        // Set values to views
         dogName.text = name
         dogBreed.text = ageBreed
         if (imageResId != -1) {
             dogImage.setImageResource(imageResId)
         }
+
         description.text = "$name is a loving and loyal companion looking for a forever home. $ageBreed and full of joy!"
 
         backButton.setOnClickListener {
             finish()
         }
 
-        vaccinationBtn.setOnClickListener {
-            // Future feature: Show vaccination history
-        }
-
         adoptBtn.setOnClickListener {
-            // Future feature: Handle adoption
+            val intent = Intent(this, AdoptFormActivity::class.java)
+            intent.putExtra("dogName", name)
+            startActivity(intent)
         }
     }
 }
