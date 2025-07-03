@@ -17,17 +17,26 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <resources>
-        <string name="app_name">Pawmé</string>
-        <string name="search_hint">Search tasks by type, location...</string>
-        <string name="feeding">Feeding</string>
-        <string name="transport">Transport</string>
-        <string name="grooming">Grooming</string>
-        <string name="medical">Medical</string>
-        <string name="events">Events</string>
-        <string name="task_list">List of available tasks</string>
-        <string name="logo_description">App logo</string>
-    </resources>
+    <style name="BlackButton">
+        <item name="android:backgroundTint">@color/black</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="CoralButton">
+        <item name="android:backgroundTint">@color/soft_coral</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:fontFamily">@font/be_vietnam_pro</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+
+
+
 
 
 

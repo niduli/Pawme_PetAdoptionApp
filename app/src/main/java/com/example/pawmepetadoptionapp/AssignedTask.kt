@@ -4,5 +4,5 @@ data class AssignedTask(
     val name: String,
     val time: String,
     val location: String,
-    val status: String // e.g., "Pending", "Confirmed"
+    val status: String
 )

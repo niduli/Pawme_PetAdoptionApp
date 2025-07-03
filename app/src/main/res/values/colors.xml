@@ -14,6 +14,9 @@
     <color name="gray_200">#FFEEEEEE</color>
     <color name="gray_500">#FF9E9E9E</color>
 
+    <color name="soft_coral">#FF6F4E</color>
+
+
 
     <!-- pawmepetadoptionapp brand colors -->
     <color name="pawmepetadoptionapp_primary">#FF7E57C2</color>
@@ -25,6 +28,11 @@
 
     <color name="pawmepetadoptionapp_primary_dark">#FF5E35B1</color> <!-- Darker purple -->
     <color name="pawmepetadoptionapp_secondary_dark">#FF7E57C2</color>
+
+    <color name="cancel_button">#B71C1C</color>
+    <color name="start_button">#0D47A1</color>
+    <color name="complete_button">#1B5E20</color>
+
 
 
 

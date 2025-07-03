@@ -1,14 +1,20 @@
 package com.example.pawmepetadoptionapp
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
+import android.widget.Filter
+import android.widget.Filterable
 
 class VolunteerTaskAdapter(private val taskList: List<VolunteerTask>) :
-    RecyclerView.Adapter<VolunteerTaskAdapter.TaskViewHolder>() {
+    RecyclerView.Adapter<VolunteerTaskAdapter.TaskViewHolder>(), Filterable {
+
+    private var filteredTaskList = taskList.toMutableList()
 
     class TaskViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val title: TextView = view.findViewById(R.id.taskTitle)
@@ -25,15 +31,16 @@ class VolunteerTaskAdapter(private val taskList: List<VolunteerTask>) :
         return TaskViewHolder(view)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
-        val task = taskList[position]
+        val task = filteredTaskList[position]
         val context = holder.itemView.context
 
         holder.title.text = task.title
-        holder.location.text = context.getString(R.string.location_label, task.location)
-        holder.time.text = context.getString(R.string.time_label, task.time)
-        holder.duration.text = context.getString(R.string.duration_label, task.duration)
-        holder.urgency.text = task.urgency
+        holder.location.text = "Location: ${task.location}"
+        holder.time.text = "Time: ${task.time}"
+        holder.duration.text = "Duration: ${task.duration}"
+        holder.urgency.text = "Urgency: ${task.urgency}"
 
         holder.applyButton.setOnClickListener {
             val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_task_details, null)
@@ -45,23 +52,54 @@ class VolunteerTaskAdapter(private val taskList: List<VolunteerTask>) :
             val confirmBtn = dialogView.findViewById<Button>(R.id.confirmApplyButton)
 
             title.text = task.title
-            desc.text = context.getString(R.string.task_detail_description, task.title.lowercase())
-            skills.text = context.getString(R.string.required_skills_label)
-            location.text = context.getString(R.string.location_label, task.location)
+            desc.text = "Help us with ${task.title.lowercase()} at ${task.location}."
+            skills.text = "Required Skills: Compassion, Responsibility"
+            location.text = "Location: ${task.location}"
 
             val dialog = AlertDialog.Builder(context)
                 .setView(dialogView)
                 .create()
 
             confirmBtn.setOnClickListener {
-                Toast.makeText(context, context.getString(R.string.task_added_to_schedule), Toast.LENGTH_SHORT).show()
+                val assignedTask = AssignedTask(task.title, task.time, task.location, "Confirmed")
+                AssignedTasksStore.addTask(assignedTask)
+                Toast.makeText(context, "Task added to your schedule!", Toast.LENGTH_SHORT).show()
                 dialog.dismiss()
+
+
+                context.startActivity(Intent(context, MyScheduleActivity::class.java))
             }
 
             dialog.show()
         }
     }
 
+    override fun getItemCount(): Int = filteredTaskList.size
 
-    override fun getItemCount(): Int = taskList.size
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun performFiltering(query: CharSequence?): FilterResults {
+                val filtered = if (query.isNullOrBlank()) {
+                    taskList
+                } else {
+                    taskList.filter {
+                        it.title.contains(query, ignoreCase = true) ||
+                                it.location.contains(query, ignoreCase = true) ||
+                                it.urgency.contains(query, ignoreCase = true)
+                    }
+                }
+                return FilterResults().apply { values = filtered }
+            }
+
+            @SuppressLint("NotifyDataSetChanged")
+            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                val resultList = results?.values
+                if (resultList is List<*>) {
+                    filteredTaskList = resultList.filterIsInstance<VolunteerTask>().toMutableList()
+                    notifyDataSetChanged()
+                }
+            }
+        }
+    }
 }
+

@@ -10,12 +10,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.PawmePetAdoptionApp"
+        android:theme="@style/Theme.PawmepetadoptionApp"
         tools:targetApi="31">
 
         <!-- Launches Volunteer Dashboard -->
         <activity
-            android:name=".AvailableTasksActivity"
+            android:name=".VolunteerDashboardActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,7 +23,8 @@
             </intent-filter>
         </activity>
 
-        <!-- Declared other screens -->
+        <!-- Other screens -->
+        <activity android:name=".AvailableTasksActivity" />
         <activity android:name=".MyScheduleActivity" />
     </application>
 

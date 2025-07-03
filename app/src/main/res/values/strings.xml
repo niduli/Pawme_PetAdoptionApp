@@ -1,77 +1,67 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
 
-    <string name="app_name">Pawmepetadoption</string>
-    <string name="task_title">Task Title</string>
-    <string name="location">Location</string>
-    <string name="time">Time</string>
-    <string name="duration">Duration</string>
-    <string name="urgency">Urgency</string>
-    <string name="apply">Apply</string>
+    <!-- App Name -->
+    <string name="app_name">Pawme</string>
 
-    <string name="feeding">Feeding</string>
-    <string name="transport">Transport</string>
-    <string name="grooming">Grooming</string>
-    <string name="medical">Medical</string>
-    <string name="events">Events</string>
-
-
-    <string name="logo_description">App logo</string>
-
+    <!-- General UI -->
+    <string name="logo_description">Pawme Logo</string>
     <string name="search_hint">Search tasks by type, location...</string>
 
-    <string name="task_list">List of available volunteer tasks</string>
+    <!-- Volunteer Dashboard -->
+    <string name="dashboard_slogan">Be Their Hero - Volunteer for Paws with Purpose!</string>
+    <string name="available_tasks">Available Tasks</string>
+    <string name="my_schedule">My Schedule</string>
+    <string name="my_history">My History</string>
+    <string name="profile">Profile</string>
+
+    <!-- Available Tasks -->
+    <string name="task_list">List of available tasks</string>
+    <string name="location_label">Location: %1$s</string>
+    <string name="time_label">Time: %1$s</string>
+    <string name="duration_label">Duration: %1$s</string>
+    <string name="required_skills_label">Basic animal care, time management</string>
+    <string name="task_detail_description">Details for %1$s</string>
+    <string name="task_added_to_schedule">Task added to your schedule!</string>
+
+    <!-- My Schedule -->
 
     <string name="task_time">Time: %1$s</string>
     <string name="task_location">Location: %1$s</string>
     <string name="task_status">Status: %1$s</string>
 
-    <string name="cancel">Cancel</string>
-    <string name="start">Start</string>
-    <string name="complete">Complete</string>
+    <string name="pawme_logo">Pawme Logo</string>
+    <string name="be_their_hero_volunteer_for_paws_with_purpose">Be Their Hero - Volunteer for Paws with Purpose!</string>
+    <string name="morning_feeding_shelter_dogs">Morning Feeding - Shelter Dogs</string>
+    <string name="location_colombo">Location: Colombo</string>
+    <string name="time_9_00_am">Time: 9:00 AM</string>
+    <string name="duration_2_hours">Duration: 2 hours</string>
+    <string name="urgency_high">Urgency: High</string>
+    <string name="apply">Apply</string>
 
-    <string name="logo_description" tools:ignore="DuplicateDefinition">App logo</string>
-    <string name="my_schedule">My Schedule</string>
+    <string name="urgency_label">Urgency: %1$s</string>
 
-    <string name="schedule_list_description">List of scheduled volunteer tasks</string>
+    <string name="back">Back</string>
 
-    <string name="task_name">Task Name</string>
-    <string name="task_time_sample">Time: 8:00 AM</string> <!-- for preview only -->
-    <string name="task_location_sample">Location: Colombo</string> <!-- for preview only -->
-    <string name="task_status_sample">Status: Confirmed</string> <!-- for preview only -->
+    <string name="search">Search</string>
+    <string name="search_tasks_by_feeding_transport_grooming_medical_and_events">Search tasks by feeding, transport, grooming, medical and events</string>
+    <string name="available_task_list">List of available volunteer tasks</string>
 
-    <!-- Volunteer Task Adapter Texts -->
-    <string name="location_label">Location: %1$s</string>
-    <string name="time_label">Time: %1$s</string>
-    <string name="duration_label">Duration: %1$s</string>
-    <string name="task_detail_description">This task involves helping at the shelter with %1$s.\nPlease be on time.</string>
-    <string name="required_skills_label">Required skills: General volunteer experience</string>
-    <string name="task_added_to_schedule">Task Added to Your Schedule</string>
 
     <string name="task_title_label">Task Title</string>
     <string name="description_label">Description</string>
-    <string name="required_skills_label" tools:ignore="DuplicateDefinition">Required Skills</string>
     <string name="location_label_simple">Location</string>
     <string name="confirm_application">Confirm Application</string>
+    <string name="schedule_list_description">List of scheduled tasks</string>
 
 
-    <string name="search_icon">Search icon</string>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    <string name="task_name">Task Name</string>
+    <string name="task_time_sample">Time: 10:00 AM</string>
+    <string name="task_location_sample">Location: Colombo</string>
+    <string name="task_status_sample">Status: Pending</string>
+    <string name="cancel">Cancel</string>
+    <string name="start">Start</string>
+    <string name="complete">Complete</string>
 
 
 

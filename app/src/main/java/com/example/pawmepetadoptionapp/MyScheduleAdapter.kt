@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class MyScheduleAdapter(
-    private val taskList: List<AssignedTask>,
+    private val taskList: MutableList<AssignedTask>,
     private val onActionClick: (String, AssignedTask) -> Unit
 ) : RecyclerView.Adapter<MyScheduleAdapter.TaskViewHolder>() {
 
@@ -51,4 +51,12 @@ class MyScheduleAdapter(
     }
 
     override fun getItemCount(): Int = taskList.size
+
+    fun removeTask(task: AssignedTask) {
+        val index = taskList.indexOf(task)
+        if (index != -1) {
+            taskList.removeAt(index)
+            notifyItemRemoved(index)
+        }
+    }
 }
