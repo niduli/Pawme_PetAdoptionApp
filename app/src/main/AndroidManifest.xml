@@ -26,6 +26,8 @@
         <!-- Other screens -->
         <activity android:name=".AvailableTasksActivity" />
         <activity android:name=".MyScheduleActivity" />
+        <activity android:name=".HistoryActivity" />
+
     </application>
 
 </manifest>
