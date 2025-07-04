@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.pawmepetadoptionapp.AvailableDogsFragment
+import com.example.pawmepetadoptionapp.DummyFragment
 import com.example.pawmepetadoptionapp.FosterDogs.MyFostersFragment
 import com.example.pawmepetadoptionapp.Profile.FosterProfileFragment
 import com.example.pawmepetadoptionapp.R
@@ -27,8 +28,7 @@ class FosterMainActivity : AppCompatActivity() {
                 R.id.nav_available -> loadFragment(AvailableDogsFragment())
                 R.id.nav_myfosters -> loadFragment(MyFostersFragment())
                 R.id.nav_vaccination -> loadFragment(VaccinationTrackerFragment())
-                R.id.nav_profile -> loadFragment(FosterProfileFragment())
-            }
+                R.id.nav_profile -> loadFragment(DummyFragment("Profile"))            }
             true
         }
 

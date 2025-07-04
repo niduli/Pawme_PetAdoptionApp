@@ -8,7 +8,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.PawmePetAdoptionApp">
+        android:theme="@style/Base.Theme.PawmePetAdoptionApp">
 
         <!-- Replace .FosterMainActivity or your actual main launcher activity -->
         <activity
@@ -22,7 +22,6 @@
 
         <!-- Other activities -->
         <activity android:name=".MainActivity" />
-        <activity android:name=".FosterLoginActivity" />
         <!-- Add others as needed -->
 
     </application>

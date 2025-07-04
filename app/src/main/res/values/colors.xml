@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Core App Colors -->
-    <color name="colorPrimary">#FF6B6B</color> <!-- main purple -->
-    <color name="colorPrimaryDark">#5A45D3</color>
-    <color name="colorAccent">#FFB300</color> <!-- yellow accent -->
+    <color name="colorPrimary">#FF6B6B</color>
+    <color name="colorPrimaryDark">#FD4D16</color>
+    <color name="colorAccent">#FFB300</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
-
+    <color name="colorTab">#FFFFFF</color>
+    <color name="colorNotSelectedText">#6D6D6D</color>
+    <color name="colorSelectedText">#FF5722</color>
+    <color name="colorTabIndicator">#FF5722</color>
+    <color name="colorBottomNavSelector">#FFE1DC</color>
+    <color name="colorOrange">#FFE1DC</color>
 
 
     <!-- Text and UI helpers -->
     <color name="textPrimary">#333333</color>
-    <color name="purple_500">#6200EE</color>
     <color name="textSecondary">#666666</color>
     <color name="textHint">#AAAAAA</color>
 
     <!-- Card backgrounds -->
-    <color name="cardBackground">#FAFAFA</color>
-    <color name="cardShadow">#E0E0E0</color>
+    <color name="cardBackground">#FFD5CC</color>
+    <color name="cardShadow">#FFC4B2</color>
 
     <!-- Error / Warning -->
     <color name="errorRed">#E53935</color>
