@@ -41,6 +41,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Choose Fostering"
-        android:backgroundTint="@color/purple_500"
+        android:backgroundTint="@color/colorPrimary"
         android:textColor="@android:color/white" />
 </LinearLayout>

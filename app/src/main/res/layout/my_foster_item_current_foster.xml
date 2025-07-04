@@ -62,6 +62,7 @@
                     android:text="Extend"
                     android:textSize="13sp"
                     android:layout_weight="1"
+                    android:backgroundTint="@color/colorPrimary"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" />
 
@@ -70,6 +71,7 @@
                     android:text="Report"
                     android:textSize="13sp"
                     android:layout_weight="1"
+                    android:backgroundTint="@color/colorBlack"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp" />
