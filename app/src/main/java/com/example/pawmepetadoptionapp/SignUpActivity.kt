@@ -7,6 +7,8 @@ import android.view.MotionEvent
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class SignUpActivity : AppCompatActivity() {
 
@@ -18,8 +20,9 @@ class SignUpActivity : AppCompatActivity() {
     private lateinit var signUpBtn: Button
     private lateinit var signInText: TextView
 
-    private var passwordVisible = false
-    private var confirmPasswordVisible = false
+    private lateinit var auth: FirebaseAuth
+    private lateinit var firestore: FirebaseFirestore
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,96 +36,114 @@ class SignUpActivity : AppCompatActivity() {
         signUpBtn = findViewById(R.id.signUpBtn)
         signInText = findViewById(R.id.signInText)
 
+        auth = FirebaseAuth.getInstance()
+        firestore = FirebaseFirestore.getInstance()
+
         val roles = listOf("Adopter", "Foster", "Volunteer", "Donor")
         val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, roles)
         roleField.setAdapter(adapter)
 
-        passwordField.setOnTouchListener { _, event ->
-            if (event.action == MotionEvent.ACTION_UP) {
-                val drawableEnd = 2
-                passwordField.compoundDrawables[drawableEnd]?.let { drawable ->
-                    val bounds = drawable.bounds
-                    if (event.rawX >= (passwordField.right - bounds.width())) {
-                        passwordVisible = !passwordVisible
-                        togglePasswordVisibility(passwordField, passwordVisible, R.drawable.lock1)
-                        return@setOnTouchListener true
-                    }
-                }
-            }
-            false
-        }
-
-        confirmPasswordField.setOnTouchListener { _, event ->
-            if (event.action == MotionEvent.ACTION_UP) {
-                val drawableEnd = 2
-                confirmPasswordField.compoundDrawables[drawableEnd]?.let { drawable ->
-                    val bounds = drawable.bounds
-                    if (event.rawX >= (confirmPasswordField.right - bounds.width())) {
-                        confirmPasswordVisible = !confirmPasswordVisible
-                        togglePasswordVisibility(confirmPasswordField, confirmPasswordVisible, R.drawable.lock2)
-                        return@setOnTouchListener true
-                    }
-                }
-            }
-            false
-        }
+        // Toggle visibility for password
+        setupPasswordToggle(passwordField, R.drawable.padlocksquare)
+        setupPasswordToggle(confirmPasswordField, R.drawable.padlocksquare)
 
         signUpBtn.setOnClickListener {
-            val username = usernameField.text.toString().trim()
-            val email = emailField.text.toString().trim()
-            val role = roleField.text.toString().trim()
-            val password = passwordField.text.toString()
-            val confirmPassword = confirmPasswordField.text.toString()
-
-            if (username.isEmpty() || email.isEmpty() || role.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
-                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            if (!roles.contains(role)) {
-                Toast.makeText(this, "Please select a valid role", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            if (password != confirmPassword) {
-                Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            // TODO: Firebase Sign-Up Logic here
-
-            Toast.makeText(this, "Sign-up successful!", Toast.LENGTH_SHORT).show()
-
-            // Redirect to SignInActivity after successful signup
-            val intent = Intent(this, SignInActivity::class.java)
-            startActivity(intent)
-            finish()
+            signUpUser()
         }
 
         signInText.setOnClickListener {
-            val intent = Intent(this, SignInActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, SignInActivity::class.java))
         }
     }
 
-    private fun togglePasswordVisibility(editText: EditText, isVisible: Boolean, lockDrawableId: Int) {
-        if (isVisible) {
-            editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-            editText.setCompoundDrawablesWithIntrinsicBounds(
-                ContextCompat.getDrawable(this, lockDrawableId),
-                null,
-                ContextCompat.getDrawable(this, R.drawable.visible),
-                null
-            )
-        } else {
-            editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-            editText.setCompoundDrawablesWithIntrinsicBounds(
-                ContextCompat.getDrawable(this, lockDrawableId),
-                null,
-                ContextCompat.getDrawable(this, R.drawable.visibility_off),
-                null
-            )
+    private fun signUpUser() {
+        val username = usernameField.text.toString().trim()
+        val email = emailField.text.toString().trim()
+        val role = roleField.text.toString().trim()
+        val password = passwordField.text.toString()
+        val confirmPassword = confirmPasswordField.text.toString()
+
+        if (username.isEmpty() || email.isEmpty() || role.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+            return
         }
-        editText.setSelection(editText.text.length)
+
+        val roles = listOf("Adopter", "Foster", "Volunteer", "Donor")
+        if (!roles.contains(role)) {
+            Toast.makeText(this, "Please select a valid role", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (password != confirmPassword) {
+            Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        auth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val uid = auth.currentUser?.uid
+                    val user = hashMapOf(
+                        "uid" to uid,
+                        "username" to username,
+                        "email" to email,
+                        "role" to role
+                    )
+
+                    if (uid != null) {
+                        firestore.collection("users").document(uid)
+                            .set(user)
+                            .addOnSuccessListener {
+                                Toast.makeText(this, "Sign-up successful!", Toast.LENGTH_SHORT).show()
+                                startActivity(Intent(this, SignInActivity::class.java))
+                                finish()
+                            }
+                            .addOnFailureListener { e ->
+                                Toast.makeText(this, "Failed to save user: ${e.message}", Toast.LENGTH_LONG).show()
+                            }
+                    }
+                } else {
+                    Toast.makeText(this, "Sign-up failed: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                }
+            }
     }
+
+    private fun setupPasswordToggle(editText: EditText, iconStart: Int) {
+        var isVisible = false
+
+        editText.setOnTouchListener { _, event ->
+            if (event.action == MotionEvent.ACTION_UP) {
+                val drawableEnd = 2
+                val drawable = editText.compoundDrawables[drawableEnd]
+                if (drawable != null) {
+                    val bounds = drawable.bounds
+                    if (event.rawX >= (editText.right - bounds.width())) {
+                        isVisible = !isVisible
+
+                        // Set input type and icon
+                        editText.inputType = if (isVisible) {
+                            InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                        } else {
+                            InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                        }
+
+                        editText.setCompoundDrawablesWithIntrinsicBounds(
+                            ContextCompat.getDrawable(this, iconStart),
+                            null,
+                            ContextCompat.getDrawable(
+                                this,
+                                if (isVisible) R.drawable.visible else R.drawable.visibility_off
+                            ),
+                            null
+                        )
+
+                        editText.setSelection(editText.text.length)
+                        return@setOnTouchListener true
+                    }
+                }
+            }
+            false
+        }
+    }
+
 }
