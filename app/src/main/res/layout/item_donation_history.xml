@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#F5F5F5"
+    android:orientation="horizontal"
+    android:padding="12dp"
+    android:layout_marginBottom="12dp"
+    android:gravity="center_vertical"
+    android:layout_marginHorizontal="4dp"
+    android:layout_gravity="center"
+    android:clipToPadding="false"
+    android:backgroundTint="#F5F5F5"
+    android:elevation="2dp"
+    android:layout_marginTop="4dp"
+    android:background="@drawable/rounded_background">
+
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_money"
+        android:background="#333333"
+        android:padding="8dp"
+        android:contentDescription="icon"
+        android:layout_marginEnd="12dp"
+        android:scaleType="centerInside"
+        android:backgroundTint="#333333"
+        android:cropToPadding="true" />
+
+    <!-- Text Info -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvDonationType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Money Donation"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvDonationDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="15/01/2025"
+            android:textColor="#666666"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/tvDonationAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="$100"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:textSize="14sp"/>
+</LinearLayout>
