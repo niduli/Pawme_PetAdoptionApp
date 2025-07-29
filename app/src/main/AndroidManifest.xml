@@ -14,19 +14,13 @@
         android:theme="@style/Theme.PawmePetAdoptionApp"
         tools:targetApi="31">
 
-        <!-- Correct declaration of VaccinationHistoryActivity -->
-        <activity
-            android:name=".vaccine.VaccinationHistoryActivity"
-            android:exported="false" />
-
+        <!-- Dog adoption activities -->
         <activity
             android:name=".adopter.AdoptFormActivity"
             android:exported="false" />
-
         <activity
             android:name=".adopter.DogDetailActivity"
             android:exported="false" />
-
         <activity
             android:name=".adopter.AdoptionActivity"
             android:exported="true">
@@ -36,10 +30,15 @@
             </intent-filter>
         </activity>
 
+        <!-- Vaccination history screen -->
+        <activity
+            android:name=".adopter.VaccinationHistoryActivity"
+            android:exported="false" />
+
+        <!-- Optional Main Activity if used -->
         <activity
             android:name=".MainActivity"
             android:exported="true" />
-
     </application>
 
 </manifest>

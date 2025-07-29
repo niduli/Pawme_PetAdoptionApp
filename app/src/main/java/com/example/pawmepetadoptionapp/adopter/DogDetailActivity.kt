@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pawmepetadoptionapp.R
-import com.example.pawmepetadoptionapp.vaccine.VaccinationHistoryActivity
 
 class DogDetailActivity : AppCompatActivity() {
 
@@ -25,19 +24,19 @@ class DogDetailActivity : AppCompatActivity() {
         val ageBreed = intent.getStringExtra("ageBreed") ?: "Unknown"
         val imageResId = intent.getIntExtra("imageResId", -1)
 
-        dogName.text = name
-        dogBreed.text = ageBreed
+        dogName.text = "Name: $name"
+        dogBreed.text = "Breed: $ageBreed"
+        description.text = "$name is a loving and loyal companion looking for a forever home. $ageBreed and full of joy!"
+
         if (imageResId != -1) {
             dogImage.setImageResource(imageResId)
         }
-        description.text = "$name is a loving and loyal companion looking for a forever home. $ageBreed and full of joy!"
 
         backButton.setOnClickListener {
             finish()
         }
 
         vaccinationBtn.setOnClickListener {
-            Toast.makeText(this, "Opening Vaccination History...", Toast.LENGTH_SHORT).show()
             val intent = Intent(this, VaccinationHistoryActivity::class.java)
             startActivity(intent)
         }
