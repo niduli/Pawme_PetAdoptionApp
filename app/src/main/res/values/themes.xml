@@ -1,13 +1,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Theme.PawmepetadoptionApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Set all activity background to white -->
-        <item name="android:windowBackground">@android:color/white</item>
-        <item name="android:colorBackground">@android:color/white</item>
-
-        <!-- You can also customize primary colors here -->
-        <item name="colorPrimary">#FF6F00</item> <!-- e.g., orange for paw branding -->
-        <item name="colorPrimaryVariant">#E65100</item>
-        <item name="colorOnPrimary">#FFFFFF</item>
-        <item name="colorSecondary">#00897B</item>
+    <!-- Base application theme. -->
+    <style name="Base.Theme.PawmePetAdoptionApp" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/colorOrange </item>
     </style>
+    <style name="Theme.PawmePetAdoptionApp" parent="Base.Theme.PawmePetAdoptionApp">
+        <item name="colorPrimary">@color/colorOrange </item>
+    </style>
+
 </resources>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_available"
+        android:title="Available"
+        android:icon="@drawable/ic_dog" />
+    <item
+        android:id="@+id/nav_myfosters"
+        android:title="My Fosters"
+        android:icon="@drawable/ic_home" />
+    <item
+        android:id="@+id/nav_vaccination"
+        android:title="Vaccination"
+        android:icon="@drawable/ic_health" />
+    <item
+        android:id="@+id/nav_profile"
+        android:title="Profile"
+        android:icon="@drawable/ic_profile_placeholder" />
+
+
+
+</menu>
