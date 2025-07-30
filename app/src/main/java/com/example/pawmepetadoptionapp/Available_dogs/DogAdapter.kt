@@ -1,0 +1,46 @@
+package com.example.pawmepetadoptionapp
+
+import DogProfileDialog
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
+
+class DogAdapter(private val dogs: List<Dog>) : RecyclerView.Adapter<DogAdapter.DogViewHolder>() {
+
+    class DogViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val dogImage: ImageView = itemView.findViewById(R.id.dogImage)
+        val dogName: TextView = itemView.findViewById(R.id.dogName)
+        val learnMore: Button = itemView.findViewById(R.id.btnLearnMore)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DogViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.available_dog_card, parent, false)
+        return DogViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: DogViewHolder, position: Int) {
+        val dog = dogs[position]
+        holder.dogName.text = dog.name
+        holder.dogImage.setImageResource(dog.imageResId) // static for now
+
+        holder.learnMore.setOnClickListener {
+            val activity = holder.itemView.context as? AppCompatActivity
+            if (activity != null) {
+                val dialog = DogProfileDialog(dog) { selectedDog ->
+                    // Handle "Choose Fostering" click here, e.g.:
+                    // Toast.makeText(activity, "${selectedDog.name} chosen for fostering!", Toast.LENGTH_SHORT).show()
+                }
+                dialog.show(activity.supportFragmentManager, "DogProfileDialog")
+            } else {
+                // Optionally handle the error if context is not an AppCompatActivity
+            }
+        }
+    }
+
+    override fun getItemCount() = dogs.size
+}
