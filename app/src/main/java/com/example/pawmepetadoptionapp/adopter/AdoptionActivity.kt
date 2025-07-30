@@ -1,5 +1,6 @@
 package com.example.pawmepetadoptionapp.adopter
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -10,7 +11,6 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pawmepetadoptionapp.R
-import com.example.pawmepetadoptionapp.model.Dog
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class AdoptionActivity : AppCompatActivity() {
@@ -21,23 +21,20 @@ class AdoptionActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_adoption) // updated layout file
+        setContentView(R.layout.activity_adoption)
 
         drawerLayout = findViewById(R.id.drawer_layout)
 
-        // Open drawer on menu icon click
         val menuIcon: ImageView = findViewById(R.id.menu_icon)
         menuIcon.setOnClickListener {
             drawerLayout.openDrawer(GravityCompat.START)
         }
 
-        // Close drawer on close icon click
         val closeDrawerIcon: ImageView = findViewById(R.id.close_drawer)
         closeDrawerIcon.setOnClickListener {
             drawerLayout.closeDrawer(GravityCompat.START)
         }
 
-        // Sample dog list
         val dogs = listOf(
             Dog("Shaggy", "2 yrs • Golden Retriever", R.drawable.shaggy),
             Dog("Milo", "1 yr • Beagle", R.drawable.milo),
@@ -48,10 +45,15 @@ class AdoptionActivity : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.recyclerViewDogs)
         recyclerView.layoutManager = GridLayoutManager(this, 2)
-        adapter = DogAdapter(dogs)
+        adapter = DogAdapter(dogs) { dog ->
+            val intent = Intent(this, DogDetailActivity::class.java)
+            intent.putExtra("name", dog.name)
+            intent.putExtra("ageBreed", dog.ageBreed)
+            intent.putExtra("imageResId", dog.imageResId)
+            startActivity(intent)
+        }
         recyclerView.adapter = adapter
 
-        // Bottom navigation listener
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -67,7 +69,6 @@ class AdoptionActivity : AppCompatActivity() {
             }
         }
 
-        // Drawer menu actions
         findViewById<LinearLayout>(R.id.btnAdopter).setOnClickListener {
             Toast.makeText(this, "Adopter selected", Toast.LENGTH_SHORT).show()
             drawerLayout.closeDrawers()

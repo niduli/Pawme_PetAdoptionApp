@@ -194,6 +194,7 @@
                 android:text="Adopt Me"
                 android:backgroundTint="#FF6B6B"
                 android:textColor="#ffffff" />
+
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
