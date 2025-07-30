@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+
+    <ImageView
+        android:id="@+id/backIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_margin="16dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/ic_back"
+        android:contentDescription="Back" />
+
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Donation History"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:layout_centerHorizontal="true"
+        android:layout_alignTop="@id/backIcon" />
+
+
+    <LinearLayout
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/backIcon"
+        android:layout_marginTop="24dp"
+        android:paddingHorizontal="16dp">
+
+        <TextView
+            android:id="@+id/tabPastDonations"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Past Donations"
+            android:textColor="#FF6D00"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:paddingBottom="8dp"/>
+
+
+    </LinearLayout>
+
+
+    <View
+        android:id="@+id/tabIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="3dp"
+        android:background="#FF6D00"
+        android:layout_below="@id/tabs"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/donationRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tabIndicator"
+        android:layout_marginTop="16dp"
+        android:padding="16dp"
+        android:clipToPadding="false"/>
+</RelativeLayout>
