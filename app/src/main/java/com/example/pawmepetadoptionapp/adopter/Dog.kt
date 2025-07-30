@@ -1,4 +1,4 @@
-package com.example.pawmepetadoptionapp.model
+package com.example.pawmepetadoptionapp.adopter
 
 data class Dog(
     val name: String,

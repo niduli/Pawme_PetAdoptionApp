@@ -11,7 +11,6 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pawmepetadoptionapp.R
-import com.example.pawmepetadoptionapp.model.Dog
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class AdoptionActivity : AppCompatActivity() {
