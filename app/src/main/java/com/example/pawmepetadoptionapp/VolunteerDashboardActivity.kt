@@ -33,7 +33,7 @@ class VolunteerDashboardActivity : AppCompatActivity() {
         }
 
         findViewById<CardView>(R.id.cardHistory).setOnClickListener {
-            // TODO: Create and navigate to HistoryActivity
+            startActivity(Intent(this, HistoryActivity::class.java))
         }
     }
 }

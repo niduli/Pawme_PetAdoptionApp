@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAFAFA"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center_horizontal">
+
+        <!-- Dog Image -->
+        <ImageView
+            android:id="@+id/signupDogImage"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:src="@drawable/signup"
+            android:contentDescription="Dog"
+            android:layout_marginTop="16dp" />
+
+        <!-- Container Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_white_card"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:layout_marginTop="-20dp"
+            android:elevation="4dp">
+
+            <!-- Sign Up Heading -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sign Up"
+                android:textColor="#689BFF"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif"
+                android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="It begins with a paw and a promise"
+                android:textColor="#666666"
+                android:textSize="14sp"
+                android:fontFamily="sans-serif"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Username -->
+            <EditText
+                android:id="@+id/usernameField"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="User Name"
+                android:drawableStart="@drawable/usericon"
+                android:background="@drawable/rounded_edittext"
+                android:paddingStart="12dp"
+                android:fontFamily="sans-serif"
+                android:textColor="#000000"
+                android:textColorHint="#888888"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Email -->
+            <EditText
+                android:id="@+id/emailField"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="Email"
+                android:drawableStart="@drawable/mailenvelop"
+                android:background="@drawable/rounded_edittext"
+                android:paddingStart="12dp"
+                android:fontFamily="sans-serif"
+                android:textColor="#000000"
+                android:textColorHint="#888888"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Role Dropdown -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/roleInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:hint="Select Role"
+                android:background="@drawable/rounded_edittext"
+                android:paddingStart="4dp"
+                app:endIconMode="dropdown_menu"
+                android:labelFor="@id/roleField">
+
+                <AutoCompleteTextView
+                    android:id="@+id/roleField"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:hint="Select Role"
+                    android:contentDescription="Role selection"
+                    android:inputType="none"
+                    android:dropDownHeight="wrap_content"
+                    android:drawableStart="@drawable/usericon"
+                    android:paddingStart="12dp"
+                    android:textColor="#000000"
+                    android:textColorHint="#888888"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="sans-serif"
+                    android:importantForAccessibility="yes" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Password -->
+            <EditText
+                android:id="@+id/passwordField"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:drawableStart="@drawable/padlocksquare"
+                android:drawableEnd="@drawable/visibility_off"
+                android:background="@drawable/rounded_edittext"
+                android:paddingStart="12dp"
+                android:fontFamily="sans-serif"
+                android:textColor="#000000"
+                android:textColorHint="#888888"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Confirm Password -->
+            <EditText
+                android:id="@+id/confirmPasswordField"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="Confirm Password"
+                android:inputType="textPassword"
+                android:drawableStart="@drawable/padlocksquare"
+                android:drawableEnd="@drawable/visibility_off"
+                android:background="@drawable/rounded_edittext"
+                android:paddingStart="12dp"
+                android:fontFamily="sans-serif"
+                android:textColor="#000000"
+                android:textColorHint="#888888"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Sign Up Button -->
+            <Button
+                android:id="@+id/signUpBtn"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="Sign Up"
+                android:fontFamily="sans-serif"
+                android:textSize="16sp"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#222222"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Sign In Redirect -->
+            <TextView
+                android:id="@+id/signInText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Already have an account? Sign In"
+                android:textSize="14sp"
+                android:fontFamily="sans-serif"
+                android:textColor="#444444"
+                android:layout_gravity="center_horizontal" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
