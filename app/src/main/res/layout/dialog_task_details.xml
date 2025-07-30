@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@drawable/popup_background">
+
+
+    <TextView
+        android:id="@+id/taskDetailTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/task_title_label"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="#222222"
+        android:fontFamily="@font/be_vietnam_pro_extra_bold"
+        android:gravity="center"
+        android:layout_marginBottom="8dp" />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#CCCCCC"
+        android:layout_marginBottom="16dp" />
+
+
+    <TextView
+        android:id="@+id/taskDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/description_label"
+        android:textSize="15sp"
+        android:textColor="#333333"
+        android:fontFamily="@font/be_vietnam_pro"
+        android:layout_marginBottom="12dp" />
+
+
+    <TextView
+        android:id="@+id/taskSkills"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/required_skills_label"
+        android:textSize="15sp"
+        android:textColor="#333333"
+        android:fontFamily="@font/be_vietnam_pro"
+        android:layout_marginBottom="12dp" />
+
+
+    <TextView
+        android:id="@+id/taskLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/location_label_simple"
+        android:textSize="15sp"
+        android:textColor="#333333"
+        android:fontFamily="@font/be_vietnam_pro"
+        android:layout_marginBottom="20dp" />
+
+
+    <Button
+        android:id="@+id/confirmApplyButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/confirm_application"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        android:backgroundTint="#000000"
+        android:fontFamily="@font/be_vietnam_pro"
+        android:padding="12dp"
+        android:layout_marginTop="8dp" />
+</LinearLayout>

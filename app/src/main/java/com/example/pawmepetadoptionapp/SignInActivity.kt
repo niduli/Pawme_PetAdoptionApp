@@ -2,9 +2,13 @@ package com.example.pawmepetadoptionapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
+import android.view.MotionEvent
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import androidx.core.content.ContextCompat
 
 class SignInActivity : AppCompatActivity() {
 
@@ -15,11 +19,14 @@ class SignInActivity : AppCompatActivity() {
     private lateinit var signUpText: TextView
     private lateinit var forgotPasswordText: TextView
 
+    private lateinit var auth: FirebaseAuth
+
+    private var passwordVisible = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_in)
 
-        // Bind views
         emailField = findViewById(R.id.emailField)
         passwordField = findViewById(R.id.passwordField)
         rememberCheck = findViewById(R.id.rememberCheck)
@@ -27,31 +34,88 @@ class SignInActivity : AppCompatActivity() {
         signUpText = findViewById(R.id.signUpText)
         forgotPasswordText = findViewById(R.id.forgotPasswordText)
 
+        auth = FirebaseAuth.getInstance()
+
+        // Toggle password visibility
+        passwordField.setOnTouchListener { _, event ->
+            if (event.action == MotionEvent.ACTION_UP) {
+                val drawableEndIndex = 2
+                val drawableEnd = passwordField.compoundDrawables[drawableEndIndex]
+                if (drawableEnd != null) {
+                    val bounds = drawableEnd.bounds
+                    if (event.rawX >= (passwordField.right - bounds.width())) {
+                        passwordVisible = !passwordVisible
+                        togglePasswordVisibility()
+                        return@setOnTouchListener true
+                    }
+                }
+            }
+            false
+        }
+
         // Sign In button click
-        signInBtn.setOnClickListener {
+        signInBtn.setOnClickListener { view ->
             val email = emailField.text.toString().trim()
             val password = passwordField.text.toString().trim()
 
             if (email.isEmpty() || password.isEmpty()) {
-                Snackbar.make(it, "Please enter both email and password", Snackbar.LENGTH_SHORT).show()
-            } else {
-                // TODO: Firebase sign-in logic here
-                // Example: Go to HomeActivity
-                val intent = Intent(this, HomeActivity::class.java)
-                startActivity(intent)
-                finish()
+                Snackbar.make(view, "Please enter both email and password", Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
+
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnSuccessListener {
+                    Snackbar.make(view, "Login successful!", Snackbar.LENGTH_SHORT).show()
+                    val intent = Intent(this, HomeActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+                .addOnFailureListener { e ->
+                    Snackbar.make(view, "Login failed: ${e.message}", Snackbar.LENGTH_LONG).show()
+                }
         }
 
-        // Sign Up redirect
+        // Sign Up navigation
         signUpText.setOnClickListener {
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
         }
 
-        // Forgot Password placeholder
+        // Forgot Password (optional feature)
         forgotPasswordText.setOnClickListener {
-            Toast.makeText(this, "Forgot Password feature coming soon!", Toast.LENGTH_SHORT).show()
+            val email = emailField.text.toString().trim()
+            if (email.isEmpty()) {
+                Toast.makeText(this, "Enter email to reset password", Toast.LENGTH_SHORT).show()
+            } else {
+                auth.sendPasswordResetEmail(email)
+                    .addOnSuccessListener {
+                        Toast.makeText(this, "Reset link sent to your email", Toast.LENGTH_SHORT).show()
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(this, "Error: ${it.message}", Toast.LENGTH_SHORT).show()
+                    }
+            }
         }
+    }
+
+    private fun togglePasswordVisibility() {
+        if (passwordVisible) {
+            passwordField.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            passwordField.setCompoundDrawablesWithIntrinsicBounds(
+                ContextCompat.getDrawable(this, R.drawable.padlocksquare),
+                null,
+                ContextCompat.getDrawable(this, R.drawable.visible),
+                null
+            )
+        } else {
+            passwordField.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            passwordField.setCompoundDrawablesWithIntrinsicBounds(
+                ContextCompat.getDrawable(this, R.drawable.padlocksquare),
+                null,
+                ContextCompat.getDrawable(this, R.drawable.visibility_off),
+                null
+            )
+        }
+        passwordField.setSelection(passwordField.text.length)
     }
 }
