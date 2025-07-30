@@ -7,7 +7,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pawmepetadoptionapp.R
-import com.example.pawmepetadoptionapp.model.Dog
 
 class DogAdapter(
     private val dogs: List<Dog>,
