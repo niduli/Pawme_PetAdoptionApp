@@ -5,7 +5,6 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.yourapp.R
 
 class DonationHistoryActivity : AppCompatActivity() {
 
@@ -14,7 +13,7 @@ class DonationHistoryActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.donation_history)
+        setContentView(R.layout.item_donation_history)
 
         // Back icon click
         findViewById<ImageView>(R.id.backIcon).setOnClickListener {
