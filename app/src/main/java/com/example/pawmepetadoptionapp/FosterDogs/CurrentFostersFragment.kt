@@ -17,7 +17,7 @@ class CurrentFostersFragment : Fragment() {
     data class FosterDog(val name: String, val daysLeft: Int, val imageResId: Int)
 
     private val fosterList = listOf(
-        FosterDog("Milo", 5, R.drawable.Milo),
+        FosterDog("Milo", 5, R.drawable.milo1),
         FosterDog("Mochi", 22, R.drawable.mochi)
 
 
