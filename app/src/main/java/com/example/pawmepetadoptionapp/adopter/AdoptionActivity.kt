@@ -38,7 +38,7 @@ class AdoptionActivity : AppCompatActivity() {
 
         val dogs = listOf(
             Dog("Shaggy", "2 yrs • Golden Retriever", R.drawable.shaggy),
-            Dog("Milo", "1 yr • Beagle", R.drawable.milo),
+            Dog("Milo", "1 yr • Beagle", R.drawable.Milo),
             Dog("Daisy", "4 yrs • Poodle", R.drawable.daisy),
             Dog("Razor", "3 yrs • Husky", R.drawable.razor),
             Dog("Luna", "5 months • Mix", R.drawable.luna)
