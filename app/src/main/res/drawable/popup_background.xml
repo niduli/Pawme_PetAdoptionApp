@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <!-- Light background using brand color tone -->
+    <solid android:color="#FFF4F0" />
+
+    <!-- Rounded corners -->
+    <corners android:radius="16dp" />
+
+    <!-- Padding inside the dialog -->
+    <padding
+        android:left="12dp"
+        android:top="12dp"
+        android:right="12dp"
+        android:bottom="12dp" />
+
+    <!-- Subtle stroke to match brand -->
+    <stroke android:width="1dp" android:color="#FF6F4E" />
+</shape>
