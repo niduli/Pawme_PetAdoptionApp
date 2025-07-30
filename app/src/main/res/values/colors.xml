@@ -26,4 +26,6 @@
     <!-- Error / Warning -->
     <color name="errorRed">#E53935</color>
     <color name="warningYellow">#FFB74D</color>
+    <color name="black">#000000</color>
+    <color name="soft_coral">#F2B9B0</color>
 </resources>

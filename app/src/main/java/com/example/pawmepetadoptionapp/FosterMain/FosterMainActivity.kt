@@ -1,4 +1,4 @@
-package com.example.pawmepetadoptionapp.Main
+package com.example.pawmepetadoptionapp.FosterMain
 
 import android.content.Intent
 import android.os.Bundle
