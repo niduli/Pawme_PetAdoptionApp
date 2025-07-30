@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="12dp"
+    card_view:cardElevation="6dp"
+    card_view:cardCornerRadius="16dp"
+    card_view:cardBackgroundColor="@android:color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+
+        <TextView
+            android:id="@+id/taskTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/morning_feeding_shelter_dogs"
+            android:textSize="18sp"
+            android:textColor="#000000"
+            android:fontFamily="@font/be_vietnam_pro_extra_bold"
+            android:layout_marginBottom="8dp" />
+
+
+        <TextView
+            android:id="@+id/taskLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/location_colombo"
+            android:textColor="#444444"
+            android:textSize="14sp"
+            android:fontFamily="@font/be_vietnam_pro" />
+
+
+        <TextView
+            android:id="@+id/taskTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/time_9_00_am"
+            android:textColor="#444444"
+            android:textSize="14sp"
+            android:fontFamily="@font/be_vietnam_pro" />
+
+
+        <TextView
+            android:id="@+id/taskDuration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/duration_2_hours"
+            android:textColor="#444444"
+            android:textSize="14sp"
+            android:fontFamily="@font/be_vietnam_pro" />
+
+
+        <TextView
+            android:id="@+id/taskUrgency"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/urgency_high"
+            android:textColor="#D32F2F"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/be_vietnam_pro" />
+
+
+        <Button
+            android:id="@+id/applyButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/apply"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:fontFamily="@font/be_vietnam_pro"
+            android:backgroundTint="#000000"
+            android:layout_marginTop="12dp" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
