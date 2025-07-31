@@ -6,9 +6,13 @@ import android.text.InputType
 import android.view.MotionEvent
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import com.example.pawmepetadoptionapp.FosterMain.FosterMainActivity
+import com.example.pawmepetadoptionapp.admin.ActivityAdminDashboard
+import com.example.pawmepetadoptionapp.adopter.AdoptionActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import androidx.core.content.ContextCompat
+import com.google.firebase.firestore.FirebaseFirestore
 
 class SignInActivity : AppCompatActivity() {
 
@@ -20,7 +24,6 @@ class SignInActivity : AppCompatActivity() {
     private lateinit var forgotPasswordText: TextView
 
     private lateinit var auth: FirebaseAuth
-
     private var passwordVisible = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,10 +68,35 @@ class SignInActivity : AppCompatActivity() {
 
             auth.signInWithEmailAndPassword(email, password)
                 .addOnSuccessListener {
-                    Snackbar.make(view, "Login successful!", Snackbar.LENGTH_SHORT).show()
-                    val intent = Intent(this, HomeActivity::class.java)
-                    startActivity(intent)
-                    finish()
+                    val uid = auth.currentUser?.uid
+                    if (uid != null) {
+                        val db = FirebaseFirestore.getInstance()
+                        db.collection("users").document(uid).get()
+                            .addOnSuccessListener { document ->
+                                if (document != null && document.exists()) {
+                                    val role = document.getString("role")
+
+                                    when (role) {
+                                        "Admin" -> startActivity(Intent(this, ActivityAdminDashboard::class.java))
+                                        "Volunteer" -> startActivity(Intent(this, VolunteerDashboardActivity::class.java))
+                                        "Adopter" -> startActivity(Intent(this, AdoptionActivity::class.java))
+                                        "Foster" -> startActivity(Intent(this, FosterMainActivity::class.java))
+                                        "Donor" -> startActivity(Intent(this, DonationActivity::class.java))
+                                        else -> {
+                                            Snackbar.make(view, "No dashboard defined for role: $role", Snackbar.LENGTH_LONG).show()
+                                            return@addOnSuccessListener
+                                        }
+                                    }
+
+                                    finish()
+                                } else {
+                                    Snackbar.make(view, "User role not found", Snackbar.LENGTH_LONG).show()
+                                }
+                            }
+                            .addOnFailureListener { e ->
+                                Snackbar.make(view, "Error fetching user data: ${e.message}", Snackbar.LENGTH_LONG).show()
+                            }
+                    }
                 }
                 .addOnFailureListener { e ->
                     Snackbar.make(view, "Login failed: ${e.message}", Snackbar.LENGTH_LONG).show()
@@ -81,7 +109,7 @@ class SignInActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Forgot Password (optional feature)
+        // Forgot Password
         forgotPasswordText.setOnClickListener {
             val email = emailField.text.toString().trim()
             if (email.isEmpty()) {
