@@ -9,8 +9,17 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.example.pawmepetadoptionapp.Available_dogs.FosterDogs
 
-class DogAdapter(private val dogs: List<Dog>) : RecyclerView.Adapter<DogAdapter.DogViewHolder>() {
+
+class DogAdapter(private val dogs: MutableList<FosterDogs>) : RecyclerView.Adapter<DogAdapter.DogViewHolder>() {
+
+    // Add this function to update the list
+    fun updateList(newDogs: List<FosterDogs>) {
+        dogs.clear()
+        dogs.addAll(newDogs)
+        notifyDataSetChanged()
+    }
 
     class DogViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val dogImage: ImageView = itemView.findViewById(R.id.dogImage)
@@ -26,7 +35,22 @@ class DogAdapter(private val dogs: List<Dog>) : RecyclerView.Adapter<DogAdapter.
     override fun onBindViewHolder(holder: DogViewHolder, position: Int) {
         val dog = dogs[position]
         holder.dogName.text = dog.name
-        holder.dogImage.setImageResource(dog.imageResId) // static for now
+
+        // Get the image name from the dog object and convert it to a drawable resource ID
+        val context = holder.itemView.context
+        val imageResId = context.resources.getIdentifier(
+            dog.imageName, // e.g., "dog1"
+            "drawable",
+            context.packageName
+        )
+
+        // If image is found, set it. Else use a default image
+        if (imageResId != 0) {
+            holder.dogImage.setImageResource(imageResId)
+        } else {
+            holder.dogImage.setImageResource(R.drawable.sample_dog)
+        }
+
 
         holder.learnMore.setOnClickListener {
             val activity = holder.itemView.context as? AppCompatActivity
