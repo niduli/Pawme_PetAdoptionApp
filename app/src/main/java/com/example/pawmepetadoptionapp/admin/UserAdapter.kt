@@ -24,11 +24,12 @@ class UserAdapter(
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
         val user = users[position]
-        holder.binding.tvName.text = user.name
+        holder.binding.tvName.text = user.username // <-- here username
         holder.binding.tvEmail.text = user.email
         holder.binding.tvRole.text = user.role
         holder.binding.btnDelete.setOnClickListener {
             onDeleteClick(user)
         }
     }
+
 }
