@@ -57,7 +57,7 @@ class ActivityAdminDashboard : AppCompatActivity() {
         // Set click listeners
         cardUsers.setOnClickListener {
             // Navigate to user management screen
-            // startActivity(Intent(this, UserManagementActivity::class.java))
+            startActivity(Intent(this, UserManagementActivity::class.java))
         }
 
         cardDogs.setOnClickListener {
