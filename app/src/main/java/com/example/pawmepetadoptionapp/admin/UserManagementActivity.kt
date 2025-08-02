@@ -43,7 +43,7 @@ class UserManagementActivity : AppCompatActivity() {
 
     private fun loadUsers() {
         firestore.collection("users")
-            .orderBy("name", Query.Direction.ASCENDING)
+            .orderBy("username", Query.Direction.ASCENDING)
             .get()
             .addOnSuccessListener { result ->
                 users.clear()
@@ -60,18 +60,19 @@ class UserManagementActivity : AppCompatActivity() {
             }
     }
 
+
     private fun showAddUserDialog() {
         val dialogBinding = DialogAddUserBinding.inflate(LayoutInflater.from(this))
         AlertDialog.Builder(this)
             .setTitle("Add New User")
             .setView(dialogBinding.root)
             .setPositiveButton("Add") { _, _ ->
-                val name = dialogBinding.etName.text.toString()
-                val email = dialogBinding.etEmail.text.toString()
-                val role = dialogBinding.etRole.text.toString()
+                val username = dialogBinding.etName.text.toString().trim()
+                val email = dialogBinding.etEmail.text.toString().trim()
+                val role = dialogBinding.etRole.text.toString().trim()
 
-                if (name.isNotEmpty() && email.isNotEmpty() && role.isNotEmpty()) {
-                    val user = User(name = name, email = email, role = role)
+                if (username.isNotEmpty() && email.isNotEmpty() && role.isNotEmpty()) {
+                    val user = User(username = username, email = email, role = role)
                     firestore.collection("users")
                         .add(user)
                         .addOnSuccessListener {
@@ -88,6 +89,7 @@ class UserManagementActivity : AppCompatActivity() {
             .setNegativeButton("Cancel", null)
             .show()
     }
+
 
     private fun deleteUser(user: User) {
         firestore.collection("users").document(user.id!!)
