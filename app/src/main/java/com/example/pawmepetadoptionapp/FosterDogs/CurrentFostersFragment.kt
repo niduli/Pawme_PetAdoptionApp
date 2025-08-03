@@ -1,5 +1,6 @@
 package com.example.pawmepetadoptionapp.FosterDogs
 
+import android.content.Context
 import android.os.Bundle
 import android.text.InputType
 import android.view.*
@@ -18,14 +19,18 @@ import androidx.core.content.ContextCompat
 
 class CurrentFostersFragment : Fragment() {
 
+    // Firebase instances
     private val auth = FirebaseAuth.getInstance()
     private val db = FirebaseFirestore.getInstance()
 
+    // UI components
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CurrentFosterAdapter
 
+    // List to hold fostered dogs
     private val currentFosters = mutableListOf<FosterDog>()
 
+    // Data class to model foster dog info
     data class FosterDog(
         val id: String = "",
         val name: String = "",
@@ -33,6 +38,7 @@ class CurrentFostersFragment : Fragment() {
         var fosterEndDate: String = ""
     )
 
+    // Inflate the fragment layout and set up RecyclerView
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,11 +53,13 @@ class CurrentFostersFragment : Fragment() {
         return view
     }
 
+    // Refresh data when fragment resumes
     override fun onResume() {
         super.onResume()
         loadCurrentFosters()
     }
 
+    // Load fostered dogs from Firestore
     private fun loadCurrentFosters() {
         val user = auth.currentUser
         if (user == null) {
@@ -60,27 +68,72 @@ class CurrentFostersFragment : Fragment() {
         }
         val userId = user.uid
 
-        // Clear existing data
+        // Clear old data before loading new
         currentFosters.clear()
         adapter.notifyDataSetChanged()
 
+        // Fetch current fosters from Firestore
         db.collection("users").document(userId)
             .collection("currentFosters")
             .get()
             .addOnSuccessListener { result ->
-                for (doc in result) {
-                    val dog = FosterDog(
-                        id = doc.id,
-                        name = doc.getString("name") ?: "",
-                        imageResName = doc.getString("imageResName") ?: "",
-                        fosterEndDate = doc.getString("fosterEndDate") ?: ""
-                    )
-                    currentFosters.add(dog)
-                }
-                adapter.notifyDataSetChanged()
+                val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                val today = Date()
 
-                if (currentFosters.isEmpty()) {
-                    Toast.makeText(context, "No current fosters found", Toast.LENGTH_SHORT).show()
+                val remainingDogs = mutableListOf<FosterDog>()
+
+                val batch = db.batch() // For efficient batch operations
+
+                val processTasks = result.documents.map { doc ->
+                    val id = doc.id
+                    val name = doc.getString("name") ?: ""
+                    val imageResName = doc.getString("imageResName") ?: ""
+                    val fosterEndDateStr = doc.getString("fosterEndDate") ?: ""
+
+                    val fosterEndDate = try {
+                        sdf.parse(fosterEndDateStr)
+                    } catch (e: Exception) {
+                        null
+                    }
+
+                    if (fosterEndDate != null && fosterEndDate.before(today)) {
+                        // Past due → Move to pastFosters
+                        val pastData = doc.data?.toMutableMap() ?: mutableMapOf()
+                        pastData["endedEarly"] = false
+                        pastData["endReason"] = "Foster period completed"
+                        pastData["endDate"] = sdf.format(today)
+
+                        val pastRef = db.collection("users").document(userId)
+                            .collection("pastFosters").document(id)
+
+                        batch.set(pastRef, pastData)
+
+                        // Remove from currentFosters
+                        val currentRef = db.collection("users").document(userId)
+                            .collection("currentFosters").document(id)
+
+                        // Mark dog as available again
+                        val dogMainRef = db.collection("dogs").document(id)
+                        batch.update(dogMainRef, "isAvailable", true)
+
+                        batch.delete(currentRef)
+
+                    } else {
+                        // Still active → keep
+                        remainingDogs.add(FosterDog(id, name, imageResName, fosterEndDateStr))
+                    }
+                }
+
+                // Commit the batch if we moved any dogs
+                batch.commit().addOnSuccessListener {
+                    currentFosters.addAll(remainingDogs)
+                    adapter.notifyDataSetChanged()
+
+                    if (currentFosters.isEmpty()) {
+                        Toast.makeText(context, "No current fosters found", Toast.LENGTH_SHORT).show()
+                    }
+                }.addOnFailureListener {
+                    Toast.makeText(context, "Error updating fosters: ${it.message}", Toast.LENGTH_SHORT).show()
                 }
             }
             .addOnFailureListener { e ->
@@ -88,15 +141,17 @@ class CurrentFostersFragment : Fragment() {
             }
     }
 
+    // RecyclerView adapter for current fostered dogs
     inner class CurrentFosterAdapter(private val dogs: List<FosterDog>) :
         RecyclerView.Adapter<CurrentFosterAdapter.ViewHolder>() {
 
+        // ViewHolder to bind views
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val imgDog: ImageView = itemView.findViewById(R.id.imageDog)
             val txtName: TextView = itemView.findViewById(R.id.txtName)
             val txtDaysRemaining: TextView = itemView.findViewById(R.id.txtDaysRemaining)
             val btnExtend: Button = itemView.findViewById(R.id.btnExtend)
-            val btnReport: Button = itemView.findViewById(R.id.btnReport)
+            val btnEndFoster: Button = itemView.findViewById(R.id.btnEndFoster)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -109,7 +164,7 @@ class CurrentFostersFragment : Fragment() {
             val dog = dogs[position]
             holder.txtName.text = dog.name
 
-            // Calculate days remaining
+            // Calculate remaining foster days
             val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
             val endDate = try {
                 sdf.parse(dog.fosterEndDate)
@@ -127,7 +182,7 @@ class CurrentFostersFragment : Fragment() {
                 if (diffDays >= 0) "Foster days remaining: $diffDays"
                 else "Foster end date invalid"
 
-            // Set dog image resource
+            // Load dog image from drawable
             val resId = holder.itemView.context.resources.getIdentifier(
                 dog.imageResName, "drawable", holder.itemView.context.packageName
             )
@@ -137,14 +192,14 @@ class CurrentFostersFragment : Fragment() {
                 holder.imgDog.setImageResource(R.drawable.sample_dog) // fallback image
             }
 
-            // EXTEND button click
+            // Handle EXTEND button click
             holder.btnExtend.setOnClickListener {
 
                 val context = holder.itemView.context
                 val dialogView = LayoutInflater.from(context).inflate(R.layout.my_foster_extend_days, null)
                 val spinner = dialogView.findViewById<Spinner>(R.id.spinnerExtendOptions)
 
-                // Define dropdown options
+                // Spinner dropdown options
                 val options = listOf("10 days", "1 month", "5 months")
                 val adapterSpinner = ArrayAdapter(context, android.R.layout.simple_spinner_item, options)
                 adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -164,7 +219,7 @@ class CurrentFostersFragment : Fragment() {
                         val cal = Calendar.getInstance()
                         cal.time = endDate
 
-                        // Parse selected option and add days/months accordingly
+                        // Add extra days or months
                         when {
                             selected.endsWith("days") -> {
                                 val days = selected.split(" ")[0].toIntOrNull() ?: 0
@@ -178,7 +233,7 @@ class CurrentFostersFragment : Fragment() {
 
                         val newEndDate = sdf.format(cal.time)
 
-                        // Update Firestore and UI
+                        // Update Firestore with new date
                         val userId = FirebaseAuth.getInstance().currentUser?.uid
                         if (userId != null) {
                             FirebaseFirestore.getInstance()
@@ -200,17 +255,94 @@ class CurrentFostersFragment : Fragment() {
                     .setNegativeButton("Cancel", null)
                     .show()
 
-                // Set button text colors (dark or your theme color)
+                // Set button colors
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
                 dialog.getButton(AlertDialog.BUTTON_NEGATIVE)?.setTextColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
 
             }
-            holder.btnReport.setOnClickListener {
-                Toast.makeText(holder.itemView.context, "Issue reported for ${dog.name}", Toast.LENGTH_SHORT).show()
+            // Handle END FOSTER button click
+            holder.btnEndFoster.setOnClickListener {
+                val context = holder.itemView.context
+                AlertDialog.Builder(context)
+                    .setTitle("End Foster")
+                    .setMessage("Are you sure you want to end the foster for ${dog.name}?")
+                    .setPositiveButton("Yes") { _, _ ->
+                        showReasonDialog(context, dog, position)
+                    }
+                    .setNegativeButton("Cancel", null)
+                    .show()
             }
         }
 
         override fun getItemCount(): Int = dogs.size
+    }
+
+    // Show second dialog to enter reason after confirming foster end
+    private fun showReasonDialog(context: Context, dog: FosterDog, position: Int) {
+        val input = EditText(context).apply {
+            hint = "Enter reason for ending foster"
+            inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
+            minLines = 3
+            setPadding(40, 30, 40, 30)
+        }
+
+        AlertDialog.Builder(context)
+            .setTitle("Reason for Ending Foster")
+            .setView(input)
+            .setPositiveButton("Submit") { _, _ ->
+                val reason = input.text.toString().trim()
+                if (reason.isNotEmpty()) {
+                    endFosterForDog(dog, reason, position)
+                } else {
+                    Toast.makeText(context, "Please provide a reason.", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    // Move dog from currentFosters to pastFosters and update UI
+    private fun endFosterForDog(dog: FosterDog, reason: String, position: Int) {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val db = FirebaseFirestore.getInstance()
+        val currentDocRef = db.collection("users").document(userId)
+            .collection("currentFosters").document(dog.id)
+
+        currentDocRef.get().addOnSuccessListener { snapshot ->
+            val data = snapshot.data
+            if (data != null) {
+                val pastData = data.toMutableMap()
+
+                // Add extra info
+                pastData["endedEarly"] = true
+                pastData["endReason"] = reason
+                pastData["endDate"] = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+
+                // Save to pastFosters
+                val pastRef = db.collection("users").document(userId)
+                    .collection("pastFosters").document(dog.id)
+
+                pastRef.set(pastData).addOnSuccessListener {
+                    // Remove from currentFosters
+                    currentDocRef.delete().addOnSuccessListener {
+                        // Mark dog available again
+                        db.collection("dogs").document(dog.id)
+                            .update("isAvailable", true)
+
+                        // Update UI
+                        currentFosters.removeAt(position)
+                        adapter.notifyItemRemoved(position)
+                        Toast.makeText(requireContext(), "Foster ended for ${dog.name}", Toast.LENGTH_SHORT).show()
+                    }.addOnFailureListener {
+                        Toast.makeText(requireContext(), "Failed to remove current foster", Toast.LENGTH_SHORT).show()
+                    }
+                }.addOnFailureListener {
+                    Toast.makeText(requireContext(), "Failed to save to past fosters", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(requireContext(), "Dog not found in database", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
 
