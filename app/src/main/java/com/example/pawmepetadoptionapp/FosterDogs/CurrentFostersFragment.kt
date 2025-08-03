@@ -89,6 +89,7 @@ class CurrentFostersFragment : Fragment() {
                     val name = doc.getString("name") ?: ""
                     val imageResName = doc.getString("imageResName") ?: ""
                     val fosterEndDateStr = doc.getString("fosterEndDate") ?: ""
+                    val fosterStartDate = doc.getString("fosterStartDate") ?: ""
 
                     val fosterEndDate = try {
                         sdf.parse(fosterEndDateStr)
@@ -101,7 +102,8 @@ class CurrentFostersFragment : Fragment() {
                         val pastData = doc.data?.toMutableMap() ?: mutableMapOf()
                         pastData["endedEarly"] = false
                         pastData["endReason"] = "Foster period completed"
-                        pastData["endDate"] = sdf.format(today)
+                        pastData["fosterEndDate"] = sdf.format(today)
+                        pastData["fosterStartDate"] = fosterStartDate
 
                         val pastRef = db.collection("users").document(userId)
                             .collection("pastFosters").document(id)
@@ -263,7 +265,7 @@ class CurrentFostersFragment : Fragment() {
             // Handle END FOSTER button click
             holder.btnEndFoster.setOnClickListener {
                 val context = holder.itemView.context
-                AlertDialog.Builder(context)
+                val dialog = AlertDialog.Builder(context)
                     .setTitle("End Foster")
                     .setMessage("Are you sure you want to end the foster for ${dog.name}?")
                     .setPositiveButton("Yes") { _, _ ->
@@ -271,6 +273,9 @@ class CurrentFostersFragment : Fragment() {
                     }
                     .setNegativeButton("Cancel", null)
                     .show()
+                // Set button colors
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE)?.setTextColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
             }
         }
 
@@ -286,7 +291,7 @@ class CurrentFostersFragment : Fragment() {
             setPadding(40, 30, 40, 30)
         }
 
-        AlertDialog.Builder(context)
+        val dialog = AlertDialog.Builder(context)
             .setTitle("Reason for Ending Foster")
             .setView(input)
             .setPositiveButton("Submit") { _, _ ->
@@ -299,6 +304,9 @@ class CurrentFostersFragment : Fragment() {
             }
             .setNegativeButton("Cancel", null)
             .show()
+        // Set button colors
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE)?.setTextColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
     }
 
     // Move dog from currentFosters to pastFosters and update UI
@@ -316,7 +324,7 @@ class CurrentFostersFragment : Fragment() {
                 // Add extra info
                 pastData["endedEarly"] = true
                 pastData["endReason"] = reason
-                pastData["endDate"] = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+                pastData["fosterEndDate"] = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
 
                 // Save to pastFosters
                 val pastRef = db.collection("users").document(userId)
