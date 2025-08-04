@@ -12,7 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.pawmepetadoptionapp.Available_dogs.FosterDogs
 
 
-class DogAdapter(private val dogs: MutableList<FosterDogs>) : RecyclerView.Adapter<DogAdapter.DogViewHolder>() {
+class DogAdapter(private val dogs: MutableList<FosterDogs>,
+                 private val onDogFostered: (FosterDogs) -> Unit
+) : RecyclerView.Adapter<DogAdapter.DogViewHolder>() {
 
     // Add this function to update the list
     fun updateList(newDogs: List<FosterDogs>) {
@@ -56,8 +58,7 @@ class DogAdapter(private val dogs: MutableList<FosterDogs>) : RecyclerView.Adapt
             val activity = holder.itemView.context as? AppCompatActivity
             if (activity != null) {
                 val dialog = DogProfileDialog(dog) { selectedDog ->
-                    // Handle "Choose Fostering" click here, e.g.:
-                    // Toast.makeText(activity, "${selectedDog.name} chosen for fostering!", Toast.LENGTH_SHORT).show()
+                    onDogFostered(selectedDog) // Notify the fragment to update list
                 }
                 dialog.show(activity.supportFragmentManager, "DogProfileDialog")
             } else {

@@ -28,7 +28,10 @@ class AvailableDogsFragment : Fragment() {
 
         recyclerView = view.findViewById(R.id.recyclerViewDogs)
         recyclerView.layoutManager = LinearLayoutManager(context)
-        adapter = DogAdapter(dogList)
+        adapter = DogAdapter(dogList) { selectedDog ->
+            dogList.remove(selectedDog)
+            adapter.notifyDataSetChanged()
+        }
         recyclerView.adapter = adapter
 
         fetchAvailableDogs()
