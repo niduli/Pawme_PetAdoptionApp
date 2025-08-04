@@ -61,16 +61,16 @@
                 <Button
                     android:id="@+id/btnExtend"
                     android:text="Extend"
-                    android:textSize="13sp"
+                    android:textSize="14sp"
                     android:layout_weight="1"
                     android:backgroundTint="@color/colorPrimary"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" />
 
                 <Button
-                    android:id="@+id/btnReport"
-                    android:text="Report"
-                    android:textSize="13sp"
+                    android:id="@+id/btnEndFoster"
+                    android:text="End Foster"
+                    android:textSize="14sp"
                     android:layout_weight="1"
                     android:backgroundTint="@color/colorBlack"
                     android:layout_width="0dp"

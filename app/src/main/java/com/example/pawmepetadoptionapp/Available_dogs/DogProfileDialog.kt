@@ -67,7 +67,7 @@ class DogProfileDialog(
 
 
         // Get current date as foster start
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val fosterStart = Date()
         val fosterStartStr = dateFormat.format(fosterStart)
 
@@ -89,12 +89,13 @@ class DogProfileDialog(
 
         // Save fostering data under user's Firestore record
         val fosterData = hashMapOf(
-            "fosterStart" to fosterStart,
-            "fosterEnd" to fosterEndStr,
+            "fosterStartDate" to fosterStartStr,
+            "fosterEndDate" to fosterEndStr,
             "name" to dog.name,
             "breed" to dog.breed,
             "age" to dog.age,
-            "needs" to dog.needs
+            "needs" to dog.needs,
+            "imageResName" to dog.imageName
         )
 
         // Step 1: Update dog's availability
@@ -103,11 +104,11 @@ class DogProfileDialog(
             .addOnSuccessListener {
                 // Step 2: Save to user's fostered dogs
                 db.collection("users").document(userId)
-                    .collection("fosteredDogs").document(dogId)
+                    .collection("currentFosters").document(dogId)
                     .set(fosterData)
                     .addOnSuccessListener {
                         Toast.makeText(context, "Fostering confirmed!", Toast.LENGTH_SHORT).show()
-                        onFosterSelected(dog)  // Optional: callback for UI
+                        onFosterSelected(dog)  // callback for UI
                         dismiss()
                     }
                     .addOnFailureListener {
