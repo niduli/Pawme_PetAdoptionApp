@@ -13,6 +13,7 @@ import com.example.pawmepetadoptionapp.DummyFragment
 import com.example.pawmepetadoptionapp.FosterDogs.MyFostersFragment
 import com.example.pawmepetadoptionapp.Profile.FosterProfileFragment
 import com.example.pawmepetadoptionapp.R
+import com.example.pawmepetadoptionapp.SignInActivity
 import com.example.pawmepetadoptionapp.Vaccination.VaccinationTrackerFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -28,7 +29,8 @@ class FosterMainActivity : AppCompatActivity() {
                 R.id.nav_available -> loadFragment(AvailableDogsFragment())
                 R.id.nav_myfosters -> loadFragment(MyFostersFragment())
                 R.id.nav_vaccination -> loadFragment(VaccinationTrackerFragment())
-                R.id.nav_profile -> loadFragment(DummyFragment("Profile"))            }
+//              R.id.nav_profile -> loadFragment(DummyFragment("Profile"))
+              }
             true
         }
 
@@ -54,19 +56,19 @@ class FosterMainActivity : AppCompatActivity() {
         val popup = PopupMenu(this, view)
         popup.menuInflater.inflate(R.menu.menu_toolbar_dropdown, popup.menu)
 
-//        popup.setOnMenuItemClickListener { item ->
-//            when (item.itemId) {
-//                R.id.action_logout -> {
-//                    Toast.makeText(this, "Logging out...", Toast.LENGTH_SHORT).show()
-//                    val intent = Intent(this, FosterLoginActivity::class.java)
-//                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-//                    startActivity(intent)
-//                    true
-//                }
-//
-//                else -> false
-//            }
-//        }
+        popup.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.action_logout -> {
+                    Toast.makeText(this, "Logging out...", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, SignInActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                    true
+                }
+
+                else -> false
+            }
+        }
 
         // Show icons in popup menu using reflection
         try {
