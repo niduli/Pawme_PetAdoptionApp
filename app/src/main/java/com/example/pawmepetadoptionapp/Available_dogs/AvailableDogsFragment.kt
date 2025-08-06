@@ -42,7 +42,7 @@ class AvailableDogsFragment : Fragment() {
 
     private fun fetchAvailableDogs() {
         db.collection("dogs")
-            .whereEqualTo("isAvailable", true)
+            .whereEqualTo("available", true)
             .get()
             .addOnSuccessListener { documents ->
                 val fetchedDogs = mutableListOf<FosterDogs>()
