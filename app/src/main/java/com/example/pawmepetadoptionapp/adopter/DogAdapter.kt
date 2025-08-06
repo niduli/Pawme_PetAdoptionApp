@@ -36,11 +36,10 @@ class DogAdapter(
 
     override fun onBindViewHolder(holder: DogViewHolder, position: Int) {
         val dog = dogs[position]
-        holder.dogImage.setImageResource(dog.imageResId)
+//        holder.dogImage.setImageResource(dog.imageResId)
         holder.dogImage.contentDescription = "Photo of ${dog.name}"
         holder.dogName.text = dog.name
-        holder.dogDetails.text = dog.ageBreed
-    }
+        holder.dogDetails.text = "${dog.age} years old • ${dog.Breed}"    }
 
     override fun getItemCount(): Int = dogs.size
 }

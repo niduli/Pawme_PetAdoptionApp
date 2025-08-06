@@ -45,16 +45,16 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="8dp" />
 
+        <!-- Input Fields -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Your answers help us ensure a perfect match."
-            android:textSize="14sp"
-            android:textColor="#888888"
+            android:layout_marginBottom="16dp"
             android:gravity="center"
-            android:layout_marginBottom="16dp" />
+            android:text="Your answers help us ensure a perfect match."
+            android:textColor="#888888"
+            android:textSize="14sp" />
 
-        <!-- Input Fields -->
         <EditText
             android:id="@+id/etName"
             android:layout_width="match_parent"
