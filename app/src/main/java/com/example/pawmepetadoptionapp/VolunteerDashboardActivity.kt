@@ -3,6 +3,7 @@ package com.example.pawmepetadoptionapp
 import android.content.Intent
 import android.os.Bundle
 import android.text.Html
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pawmepetadoptionapp.databinding.ActivityVolunteerDashboardBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -17,7 +18,7 @@ class VolunteerDashboardActivity : AppCompatActivity() {
         binding = ActivityVolunteerDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        auth = FirebaseAuth.getInstance()
+
 
         // Set colored slogan text with HTML formatting
         val coloredText = """
