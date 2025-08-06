@@ -66,7 +66,6 @@ class VolunteerTaskAdapter(private val taskList: List<VolunteerTask>) :
                 Toast.makeText(context, "Task added to your schedule!", Toast.LENGTH_SHORT).show()
                 dialog.dismiss()
 
-
                 context.startActivity(Intent(context, MyScheduleActivity::class.java))
             }
 

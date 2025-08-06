@@ -1,10 +1,10 @@
 package com.example.pawmepetadoptionapp.FosterDogs
+
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.example.pawmepetadoptionapp.R
 import com.google.android.material.tabs.TabLayout
@@ -21,17 +21,7 @@ class MyFostersFragment : Fragment() {
         tabLayout = view.findViewById(R.id.tabLayout)
         viewPager = view.findViewById(R.id.viewPager)
 
-        val adapter = object : FragmentStateAdapter(this) {
-            override fun getItemCount(): Int = 2
-            override fun createFragment(position: Int): Fragment {
-                return when (position) {
-                    0 -> CurrentFostersFragment()
-                    else -> PastFostersFragment()
-                }
-            }
-        }
-
-        viewPager.adapter = adapter
+        viewPager.adapter = MyFosterPagerAdapter(this)
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = if (position == 0) "Current Fosters" else "Past Fosters"
