@@ -8,5 +8,5 @@ data class FosterDogs(
     val duration: String = "",
     val needs: String = "",
     val imageName: String = "",
-    val isAvailable: Boolean = true
+    val available: Boolean = true
 )
