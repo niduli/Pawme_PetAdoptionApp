@@ -116,7 +116,7 @@ class CurrentFostersFragment : Fragment() {
 
                         // Mark dog as available again
                         val dogMainRef = db.collection("dogs").document(id)
-                        batch.update(dogMainRef, "isAvailable", true)
+                        batch.update(dogMainRef, "available", true)
 
                         batch.delete(currentRef)
 
@@ -335,7 +335,7 @@ class CurrentFostersFragment : Fragment() {
                     currentDocRef.delete().addOnSuccessListener {
                         // Mark dog available again
                         db.collection("dogs").document(dog.id)
-                            .update("isAvailable", true)
+                            .update("available", true)
 
                         // Update UI
                         currentFosters.removeAt(position)

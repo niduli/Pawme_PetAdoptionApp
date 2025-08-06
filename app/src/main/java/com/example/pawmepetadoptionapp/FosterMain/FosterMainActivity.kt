@@ -35,6 +35,7 @@ class FosterMainActivity : AppCompatActivity() {
         }
 
         loadFragment(AvailableDogsFragment())
+        setSupportActionBar(findViewById(R.id.topAppBar))
 
         val menuIcon = findViewById<ImageView>(R.id.menuIcon)
         val logoIcon = findViewById<ImageView>(R.id.logoIcon)
@@ -53,16 +54,16 @@ class FosterMainActivity : AppCompatActivity() {
     }
 
     private fun showPopupMenu(view: View) {
-        val popup = PopupMenu(this, view)
+        val popup = PopupMenu(view.context, view)
         popup.menuInflater.inflate(R.menu.menu_toolbar_dropdown, popup.menu)
 
         popup.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.action_logout -> {
-                    Toast.makeText(this, "Logging out...", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, SignInActivity::class.java)
+                    Toast.makeText(view.context,"Logging out...", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(view.context, SignInActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    startActivity(intent)
+                    view.context.startActivity(intent)
                     true
                 }
 

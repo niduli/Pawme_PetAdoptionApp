@@ -76,7 +76,7 @@ class PastFostersFragment : Fragment() {
                         Start Date: ${dog.startDate}
                         End Date: ${dog.endDate}
                         Ended Early: ${if (dog.endedEarly) "Yes" else "No"}
-                        Reason: ${dog.endReason}
+                        End Reason: ${dog.endReason}
                     """.trimIndent()
 
                     textView.text = details
@@ -120,7 +120,7 @@ class PastFostersFragment : Fragment() {
                     val name = doc.getString("name") ?: continue
                     val imageResName = doc.getString("imageResName") ?: "sample_dog"
                     val startDate = doc.getString("fosterStartDate") ?: "-"
-                    val endDate = doc.getString("fosterStartDate") ?: "-"
+                    val endDate = doc.getString("fosterEndDate") ?: "-"
                     val reason = doc.getString("endReason") ?: "No reason provided"
                     val endedEarly = doc.getBoolean("endedEarly") ?: false
 
