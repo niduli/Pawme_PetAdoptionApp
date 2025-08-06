@@ -99,7 +99,7 @@ class DogProfileDialog(
 
         // Step 1: Update dog's availability
         db.collection("dogs").document(dogId)
-            .update("isAvailable", false)
+            .update("available", false)
             .addOnSuccessListener {
                 // Step 2: Save to user's fostered dogs
                 db.collection("users").document(userId)
