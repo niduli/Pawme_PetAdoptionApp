@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pawmepetadoptionapp.databinding.ActivityMyScheduleBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -50,6 +51,35 @@ class MyScheduleActivity : AppCompatActivity() {
         binding.scheduleRecyclerView.adapter = adapter
 
         fetchScheduledTasks()
+
+        // Bottom Navigation setup
+        val bottomNav = findViewById<BottomNavigationView>(R.id.volunteerBottomNav)
+        bottomNav.selectedItemId = R.id.nav_my_schedule
+        bottomNav.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home -> {
+                    startActivity(Intent(this, VolunteerDashboardActivity::class.java))
+                    true
+                }
+                R.id.nav_available_tasks -> {
+                    startActivity(Intent(this, AvailableTasksActivity::class.java))
+                    true
+                }
+                R.id.nav_my_schedule -> {
+                    // Already in MyScheduleActivity
+                    true
+                }
+                R.id.nav_history -> {
+                    startActivity(Intent(this, HistoryActivity::class.java))
+                    true
+                }
+                R.id.nav_paw_alert -> {
+                    startActivity(Intent(this, StrayDogReportFormActivity::class.java))
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")

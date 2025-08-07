@@ -1,0 +1,11 @@
+<com.google.android.material.bottomnavigation.BottomNavigationView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/volunteerBottomNav"
+    android:layout_width="match_parent"
+    android:layout_height="72dp"
+    android:background="@drawable/volunteer_bottom_nav_bg"
+    app:menu="@menu/volunteer_bottom_nav_menu"
+    app:itemIconTint="@color/volunteer_nav_icon_selector"
+    app:itemTextColor="@color/volunteer_nav_text_selector"
+    app:labelVisibilityMode="labeled"/>
