@@ -14,7 +14,7 @@ class HistoryTaskAdapter(private val taskList: List<VolunteerTask>) :
         val location: TextView = view.findViewById(R.id.taskLocation)
         val time: TextView = view.findViewById(R.id.taskTime)
         val duration: TextView = view.findViewById(R.id.taskDuration)
-        val status: TextView = view.findViewById(R.id.taskUrgency) // Use this as 'Completed'
+        val status: TextView = view.findViewById(R.id.taskUrgency)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
@@ -33,7 +33,6 @@ class HistoryTaskAdapter(private val taskList: List<VolunteerTask>) :
         holder.duration.text = context.getString(R.string.duration_label, task.duration)
         holder.status.text = context.getString(R.string.completed_label)
         holder.status.setTextColor(context.getColor(android.R.color.holo_green_dark))
-
 
         holder.itemView.findViewById<View>(R.id.applyButton)?.visibility = View.GONE
     }

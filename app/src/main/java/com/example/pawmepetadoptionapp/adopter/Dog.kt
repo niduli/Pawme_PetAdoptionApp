@@ -2,6 +2,7 @@ package com.example.pawmepetadoptionapp.adopter
 
 data class Dog(
     val name: String,
-    val ageBreed: String,
-    val imageResId: Int
+    val age : Number,
+    val Breed: String,
+    val needs: String? = null
 )

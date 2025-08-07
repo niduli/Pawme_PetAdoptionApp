@@ -16,17 +16,27 @@ class DogDetailActivity : AppCompatActivity() {
         val dogImage: ImageView = findViewById(R.id.dogImage)
         val dogName: TextView = findViewById(R.id.dogName)
         val dogBreed: TextView = findViewById(R.id.dogBreed)
+        val dogNeeds: TextView = findViewById(R.id.dogNeeds)
+        val dogAge: TextView = findViewById(R.id.dogAge)
         val description: TextView = findViewById(R.id.dogDescription)
         val vaccinationBtn: Button = findViewById(R.id.vaccinationBtn)
         val adoptBtn: Button = findViewById(R.id.adoptBtn)
 
+        // Use matching keys for extras ("name", "age", "Breed", "needs", "imageResId")
         val name = intent.getStringExtra("name") ?: "Doggo"
-        val ageBreed = intent.getStringExtra("ageBreed") ?: "Unknown"
+        val age = intent.getStringExtra("age") ?: "Unknown"
+        val breed = intent.getStringExtra("Breed") ?: "Unknown"
+        val needs = intent.getStringExtra("needs") ?: "None"
         val imageResId = intent.getIntExtra("imageResId", -1)
 
-        dogName.text = "Name: $name"
-        dogBreed.text = "Breed: $ageBreed"
-        description.text = "$name is a loving and loyal companion looking for a forever home. $ageBreed and full of joy!"
+        // Set details in their respective TextViews
+        dogName.text = name
+        dogBreed.text = breed
+        dogAge.text = age
+        dogNeeds.text = needs
+
+        // Optionally set a description
+        description.text = "$name is a loving and loyal companion looking for a forever home."
 
         if (imageResId != -1) {
             dogImage.setImageResource(imageResId)
