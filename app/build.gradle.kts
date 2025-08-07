@@ -62,6 +62,7 @@ dependencies {
     implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation ("com.google.android.material:material:1.5.0")
     implementation ("com.squareup.picasso:picasso:2.8")
+    implementation ("com.cloudinary:cloudinary-android:2.3.1")
 
 
 }

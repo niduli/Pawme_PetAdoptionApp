@@ -99,7 +99,7 @@ class ActivityAdminDashboard : AppCompatActivity() {
         }
         cardVaccinations.setOnClickListener {
             // Navigate to vaccination management screen
-            // startActivity(Intent(this, VaccinationManagementActivity::class.java))
+             startActivity(Intent(this, ActivityVaccination::class.java))
         }
 
 
