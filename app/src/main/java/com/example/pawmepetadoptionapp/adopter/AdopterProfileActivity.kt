@@ -10,19 +10,14 @@ import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.cloudinary.android.MediaManager
+import com.cloudinary.android.callback.UploadCallback
 import com.example.pawmepetadoptionapp.R
 import com.example.pawmepetadoptionapp.SignInActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import okhttp3.*
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.RequestBody.Companion.asRequestBody
-import okio.IOException
-import okio.source
-import java.io.File
-
-
+import com.cloudinary.android.callback.ErrorInfo
 
 class AdopterProfileActivity : AppCompatActivity() {
 
@@ -41,11 +36,6 @@ class AdopterProfileActivity : AppCompatActivity() {
 
     private val db = FirebaseFirestore.getInstance()
     private val auth = FirebaseAuth.getInstance()
-
-    // Replace with your Cloudinary credentials
-    private val CLOUD_NAME = "dsgdfsh7o"
-    private val API_KEY = "518841528965393"
-    private val API_SECRET = "PakHabw-EJTGs1fQOFjlXgNex5U"
 
     private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK && result.data != null) {
@@ -94,7 +84,7 @@ class AdopterProfileActivity : AppCompatActivity() {
                     startActivity(intent)
                     true
                 }
-                R.id.action_logout ->{
+                R.id.action_logout -> {
                     val intent = Intent(this, SignInActivity::class.java)
                     startActivity(intent)
                     finish()
@@ -165,7 +155,7 @@ class AdopterProfileActivity : AppCompatActivity() {
         progressBar.visibility = View.VISIBLE
 
         if (selectedProfilePicUri != null) {
-            uploadImageToCloudinaryWithAuth(selectedProfilePicUri!!) { url ->
+            uploadImageToCloudinary(selectedProfilePicUri!!) { url ->
                 if (url != null) {
                     updatedData["profilePicUrl"] = url
                     updateUserData(currentUid, updatedData)
@@ -193,71 +183,24 @@ class AdopterProfileActivity : AppCompatActivity() {
             }
     }
 
-    private fun uploadImageToCloudinaryWithAuth(uri: Uri, callback: (String?) -> Unit) {
-        val CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/$CLOUD_NAME/image/upload"
-
-        // 1. Copy the Uri content to a temp file
-        val tempFile = File.createTempFile("upload", ".jpg", cacheDir)
-        try {
-            contentResolver.openInputStream(uri)?.use { input ->
-                tempFile.outputStream().use { output ->
-                    input.copyTo(output)
+    private fun uploadImageToCloudinary(uri: Uri, callback: (String?) -> Unit) {
+        MediaManager.get().upload(uri)
+            .option("resource_type", "image")
+            .callback(object : UploadCallback {
+                override fun onStart(requestId: String?) {}
+                override fun onProgress(requestId: String?, bytes: Long, totalBytes: Long) {}
+                override fun onSuccess(requestId: String?, resultData: MutableMap<Any?, Any?>?) {
+                    val url = resultData?.get("secure_url") as? String
+                    runOnUiThread { callback(url) }
                 }
-            }
-        } catch (e: Exception) {
-            callback(null)
-            return
-        }
-
-        // 2. Prepare Cloudinary params
-        val timestamp = (System.currentTimeMillis() / 1000).toString()
-        val paramsToSign = "timestamp=$timestamp"
-        val signature = sha1(paramsToSign + API_SECRET)
-
-        // 3. Build the request body
-        val requestBody = MultipartBody.Builder()
-            .setType(MultipartBody.FORM)
-            .addFormDataPart("file", tempFile.name, tempFile.asRequestBody("image/*".toMediaType()))
-            .addFormDataPart("api_key", API_KEY)
-            .addFormDataPart("timestamp", timestamp)
-            .addFormDataPart("signature", signature)
-            .build()
-
-        // 4. Create and send the request
-        val request = Request.Builder()
-            .url(CLOUDINARY_UPLOAD_URL)
-            .post(requestBody)
-            .build()
-
-        val client = OkHttpClient()
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                tempFile.delete()
-                runOnUiThread { callback(null) }
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-                tempFile.delete()
-                val resp = response.body?.string()
-                val url = resp?.let { extractCloudinaryUrl(it) }
-                runOnUiThread { callback(url) }
-            }
-        })
-    }
-    private fun sha1(input: String): String {
-        val bytes = input.toByteArray()
-        val md = java.security.MessageDigest.getInstance("SHA-1")
-        val result = md.digest(bytes)
-        return result.joinToString("") { "%02x".format(it) }
-    }
-
-    private fun extractCloudinaryUrl(response: String): String? {
-        // Simple extraction, for production use a real JSON parser!
-        val regex = "\"secure_url\":\"([^\"]+)\"".toRegex()
-        val match = regex.find(response)
-        return match?.groups?.get(1)?.value?.replace("\\/", "/")
-    }
-}
+                override fun onError(requestId: String?, error: ErrorInfo?) {
+                    runOnUiThread { callback(null) }
+                }
+                override fun onReschedule(requestId: String?, error: ErrorInfo?) {
+                    runOnUiThread { callback(null) }
+                }
+            }).dispatch()
+    }}
 
 data class User(
     var username: String? = null,
