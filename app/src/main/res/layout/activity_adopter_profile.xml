@@ -15,36 +15,30 @@
         android:paddingBottom="16dp">
 
         <LinearLayout
+            android:id="@+id/adopterProfileLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:gravity="center_horizontal">
 
-            <!-- Banner -->
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:scaleType="fitCenter"
-                android:src="@drawable/banner"
-                android:contentDescription="Banner" />
-
-            <!-- Section Title -->
             <TextView
+                android:id="@+id/tvUsername"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Recommended Matches"
+                android:text="Username:"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_margin="16dp" />
+                android:layout_marginBottom="8dp"
+                android:visibility="gone"/>
 
-            <!-- Dog RecyclerView -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewDogs"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/tvEmail"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:nestedScrollingEnabled="false"
-                android:clipToPadding="false" />
+                android:text="Email:"
+                android:textSize="18sp"
+                android:layout_marginBottom="8dp"
+                android:visibility="gone"/>
         </LinearLayout>
     </ScrollView>
 

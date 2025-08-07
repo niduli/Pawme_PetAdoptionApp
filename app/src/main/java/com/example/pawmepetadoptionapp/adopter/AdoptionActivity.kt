@@ -3,15 +3,12 @@ package com.example.pawmepetadoptionapp.adopter
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pawmepetadoptionapp.R
+import com.example.pawmepetadoptionapp.SignInActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -19,39 +16,25 @@ import com.google.firebase.firestore.QueryDocumentSnapshot
 
 class AdoptionActivity : AppCompatActivity() {
 
-    private lateinit var drawerLayout: DrawerLayout
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: DogAdapter
-    private val dogList = mutableListOf<Dog>() // Data source for the adapter
+    private val dogList = mutableListOf<Dog>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_adoption)
 
         val user = FirebaseAuth.getInstance().currentUser?.uid
-
         Log.e("AdoptionActivity", "Current User ID: $user")
-
-        drawerLayout = findViewById(R.id.drawer_layout)
-
-        val menuIcon: ImageView = findViewById(R.id.menu_icon)
-        menuIcon.setOnClickListener {
-            drawerLayout.openDrawer(GravityCompat.START)
-        }
-
-        val closeDrawerIcon: ImageView = findViewById(R.id.close_drawer)
-        closeDrawerIcon.setOnClickListener {
-            drawerLayout.closeDrawer(GravityCompat.START)
-        }
 
         recyclerView = findViewById(R.id.recyclerViewDogs)
         recyclerView.layoutManager = GridLayoutManager(this, 2)
         adapter = DogAdapter(dogList) { dog ->
             val intent = Intent(this, DogDetailActivity::class.java)
             intent.putExtra("name", dog.name)
-            intent.putExtra("age", dog.age.toString()) // Always pass as String for consistency
-            intent.putExtra("Breed", dog.Breed)        // Capital B for Breed, matches data class
-            intent.putExtra("needs", dog.needs ?: "None") // Pass needs or "None" if null
+            intent.putExtra("age", dog.age.toString())
+            intent.putExtra("Breed", dog.Breed)
+            intent.putExtra("needs", dog.needs ?: "None")
             startActivity(intent)
         }
         recyclerView.adapter = adapter
@@ -63,34 +46,25 @@ class AdoptionActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.nav_home -> {
                     Toast.makeText(this, "Home clicked", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, AdoptionActivity::class.java)
+                    startActivity(intent)
                     true
                 }
                 R.id.nav_profile -> {
                     Toast.makeText(this, "Profile clicked", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, AdopterProfileActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.action_logout ->{
+                    Toast.makeText(this, "Logout clicked", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, SignInActivity::class.java)
+                    startActivity(intent)
+                    finish()
                     true
                 }
                 else -> false
             }
-        }
-
-        findViewById<LinearLayout>(R.id.btnAdopter).setOnClickListener {
-            Toast.makeText(this, "Adopter selected", Toast.LENGTH_SHORT).show()
-            drawerLayout.closeDrawers()
-        }
-
-        findViewById<LinearLayout>(R.id.btnVolunteer).setOnClickListener {
-            Toast.makeText(this, "Volunteer selected", Toast.LENGTH_SHORT).show()
-            drawerLayout.closeDrawers()
-        }
-
-        findViewById<LinearLayout>(R.id.btnDonator).setOnClickListener {
-            Toast.makeText(this, "Donator selected", Toast.LENGTH_SHORT).show()
-            drawerLayout.closeDrawers()
-        }
-
-        findViewById<LinearLayout>(R.id.btnFoster).setOnClickListener {
-            Toast.makeText(this, "Foster selected", Toast.LENGTH_SHORT).show()
-            drawerLayout.closeDrawers()
         }
     }
 
@@ -116,8 +90,7 @@ class AdoptionActivity : AppCompatActivity() {
         val name = document.getString("name") ?: return null
         val age = document.getLong("age")?.toInt() ?: 0
         val breed = document.getString("breed") ?: ""
-        val needs = document.getString("needs") // may be null
+        val needs = document.getString("needs")
         return Dog(name, age, breed, needs)
     }
-
 }
