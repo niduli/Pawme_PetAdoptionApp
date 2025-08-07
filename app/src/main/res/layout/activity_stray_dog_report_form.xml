@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <ScrollView
         android:id="@+id/strayDogFormScrollView"
         android:layout_width="0dp"
@@ -22,6 +21,7 @@
             android:layout_height="wrap_content"
             android:background="@android:color/white">
 
+            <!-- App Title -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
                     android:importantForAccessibility="no" />
             </LinearLayout>
 
-
+            <!-- Slogan -->
             <TextView
                 android:id="@+id/appSlogan"
                 android:text="@string/app_slogan"
@@ -78,7 +78,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-
+                    <!-- Location Input -->
                     <TextView
                         android:text="@string/location_label"
                         android:textStyle="bold"
@@ -97,7 +97,9 @@
                         android:textColorHint="@color/hint_gray"
                         android:layout_marginBottom="8dp"
                         android:autofillHints="postalAddress"
-                        android:importantForAutofill="yes" />
+                        android:importantForAutofill="yes"
+                        android:focusable="false"
+                        android:clickable="false" />
                     <Button
                         android:id="@+id/buttonDropPin"
                         android:text="@string/drop_pin_on_map"
@@ -120,7 +122,7 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="16dp" />
 
-
+                    <!-- Photo Upload -->
                     <TextView
                         android:text="@string/photos_label"
                         android:textStyle="bold"
@@ -150,7 +152,7 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="16dp" />
 
-
+                    <!-- Description -->
                     <TextView
                         android:text="@string/description_label"
                         android:textStyle="bold"
@@ -180,7 +182,7 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="16dp" />
 
-
+                    <!-- Date/Time Pickers -->
                     <TextView
                         android:text="@string/date_spotted_label"
                         android:textStyle="bold"
@@ -231,7 +233,7 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="16dp" />
 
-
+                    <!-- Contact Info (Optional) -->
                     <TextView
                         android:text="@string/contact_info_label"
                         android:textStyle="bold"
