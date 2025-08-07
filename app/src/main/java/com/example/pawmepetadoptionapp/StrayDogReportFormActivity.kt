@@ -1,6 +1,7 @@
 package com.example.pawmepetadoptionapp
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -17,6 +18,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import java.io.File
@@ -52,6 +54,7 @@ class StrayDogReportFormActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stray_dog_report_form)
@@ -221,6 +224,35 @@ class StrayDogReportFormActivity : AppCompatActivity() {
             ).show()
 
             finish()
+        }
+
+        // Bottom Navigation setup
+        val bottomNav = findViewById<BottomNavigationView>(R.id.volunteerBottomNav)
+        bottomNav.selectedItemId = R.id.nav_paw_alert
+        bottomNav.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home -> {
+                    startActivity(Intent(this, VolunteerDashboardActivity::class.java))
+                    true
+                }
+                R.id.nav_available_tasks -> {
+                    startActivity(Intent(this, AvailableTasksActivity::class.java))
+                    true
+                }
+                R.id.nav_my_schedule -> {
+                    startActivity(Intent(this, MyScheduleActivity::class.java))
+                    true
+                }
+                R.id.nav_history -> {
+                    startActivity(Intent(this, HistoryActivity::class.java))
+                    true
+                }
+                R.id.nav_paw_alert -> {
+                    // Already in StrayDogReportFormActivity
+                    true
+                }
+                else -> false
+            }
         }
     }
 
