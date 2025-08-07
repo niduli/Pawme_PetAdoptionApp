@@ -1,13 +1,12 @@
 package com.example.pawmepetadoptionapp
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Location
+import android.location.Geocoder
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -54,7 +53,24 @@ class StrayDogReportFormActivity : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("MissingInflatedId")
+    // For picking location from the map (now returns address too)
+    private val mapLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK && result.data != null) {
+            val address = result.data?.getStringExtra("address")
+            val lat = result.data?.getDoubleExtra("lat", 0.0) ?: 0.0
+            val lng = result.data?.getDoubleExtra("lng", 0.0) ?: 0.0
+            val editTextLocation = findViewById<EditText>(R.id.editTextLocation)
+            val textViewCoordinates = findViewById<TextView>(R.id.textViewCoordinates)
+            if (address != null && address.isNotBlank()) {
+                editTextLocation.setText(address)
+            } else {
+                editTextLocation.setText("$lat, $lng")
+            }
+            textViewCoordinates.text = getString(R.string.coordinates_format, lat, lng)
+            pickedLatLng = Pair(lat, lng)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stray_dog_report_form)
@@ -161,43 +177,15 @@ class StrayDogReportFormActivity : AppCompatActivity() {
             ).show()
         }
 
-        // Drop Pin on Map
+        // Drop Pin on Map (address handled via MapActivity)
         buttonDropPin.setOnClickListener {
             val intent = Intent(this, MapActivity::class.java)
-            startActivityForResult(intent, 1001)
+            mapLauncher.launch(intent)
         }
 
-        // Get Current Location
-        editTextLocation.setOnLongClickListener {
-            if (ActivityCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
-                    ),
-                    LOCATION_PERMISSION_REQUEST_CODE
-                )
-            } else {
-                fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-                    location?.let {
-                        val coords = "${it.latitude}, ${it.longitude}"
-                        editTextLocation.setText(coords)
-                        textViewCoordinates.text = coords
-                        pickedLatLng = Pair(it.latitude, it.longitude)
-                    }
-                }
-            }
-            true
-        }
+        // Location field is now set only by map (no long press for current location)
+        editTextLocation.isFocusable = false
+        editTextLocation.isClickable = false
 
         // Submit Button
         buttonSubmit.setOnClickListener {
@@ -206,7 +194,7 @@ class StrayDogReportFormActivity : AppCompatActivity() {
             val date = textViewDate.text.toString()
             val time = textViewTime.text.toString()
             val contact = editTextContact.text.toString()
-            val photosList = photoUris.map { it.toString() } // list of photo URIs
+            val photosList = photoUris.map { it.toString() }
 
             if (location.isBlank() || description.isBlank() || date.isBlank() || time.isBlank() || photoUris.isEmpty()) {
                 Toast.makeText(
@@ -216,13 +204,11 @@ class StrayDogReportFormActivity : AppCompatActivity() {
                 ).show()
                 return@setOnClickListener
             }
-            // You can now send all this data (location, description, date, time, contact, photosList) to Firebase or your backend
             Toast.makeText(
                 this,
                 "Report submitted! (UI only, backend next step)",
                 Toast.LENGTH_LONG
             ).show()
-
             finish()
         }
 
@@ -261,26 +247,13 @@ class StrayDogReportFormActivity : AppCompatActivity() {
             SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
         val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return File.createTempFile(
-            "JPEG_${timeStamp}_", /* prefix */
-            ".jpg", /* suffix */
-            storageDir /* directory */
+            "JPEG_${timeStamp}_", ".jpg", storageDir
         ).apply {
             currentPhotoPath = absolutePath
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 1001 && resultCode == RESULT_OK && data != null) {
-            val lat = data.getDoubleExtra("lat", 0.0)
-            val lng = data.getDoubleExtra("lng", 0.0)
-            val editTextLocation = findViewById<EditText>(R.id.editTextLocation)
-            val textViewCoordinates = findViewById<TextView>(R.id.textViewCoordinates)
-            editTextLocation.setText("$lat, $lng")
-            textViewCoordinates.text = "$lat, $lng"
-            pickedLatLng = Pair(lat, lng)
-        }
-    }
+    // Remove old onActivityResult, use ActivityResult API instead
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -304,7 +277,6 @@ class StrayDogReportFormActivity : AppCompatActivity() {
                     ).show()
                 }
             }
-
             LOCATION_PERMISSION_REQUEST_CODE -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(
