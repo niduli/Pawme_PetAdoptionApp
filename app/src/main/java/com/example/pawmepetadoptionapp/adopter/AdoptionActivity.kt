@@ -35,6 +35,7 @@ class AdoptionActivity : AppCompatActivity() {
             intent.putExtra("age", dog.age.toString())
             intent.putExtra("Breed", dog.Breed)
             intent.putExtra("needs", dog.needs ?: "None")
+            intent.putExtra("imageUrl", dog.imageUrl ?: "")
             startActivity(intent)
         }
         recyclerView.adapter = adapter
@@ -91,6 +92,7 @@ class AdoptionActivity : AppCompatActivity() {
         val age = document.getLong("age")?.toInt() ?: 0
         val breed = document.getString("breed") ?: ""
         val needs = document.getString("needs")
-        return Dog(name, age, breed, needs)
+        val imageUrl = document.getString("imageName") // get the cloudinary url
+        return Dog(name, age, breed, needs, imageUrl)
     }
 }

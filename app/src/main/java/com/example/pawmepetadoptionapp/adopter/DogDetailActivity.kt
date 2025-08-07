@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.example.pawmepetadoptionapp.R
 
 class DogDetailActivity : AppCompatActivity() {
@@ -22,23 +23,27 @@ class DogDetailActivity : AppCompatActivity() {
         val vaccinationBtn: Button = findViewById(R.id.vaccinationBtn)
         val adoptBtn: Button = findViewById(R.id.adoptBtn)
 
-        // Use matching keys for extras ("name", "age", "Breed", "needs", "imageResId")
         val name = intent.getStringExtra("name") ?: "Doggo"
         val age = intent.getStringExtra("age") ?: "Unknown"
         val breed = intent.getStringExtra("Breed") ?: "Unknown"
         val needs = intent.getStringExtra("needs") ?: "None"
         val imageResId = intent.getIntExtra("imageResId", -1)
+        val imageUrl = intent.getStringExtra("imageUrl") // get from intent
 
-        // Set details in their respective TextViews
         dogName.text = name
         dogBreed.text = breed
         dogAge.text = age
         dogNeeds.text = needs
-
-        // Optionally set a description
         description.text = "$name is a loving and loyal companion looking for a forever home."
 
-        if (imageResId != -1) {
+        // Prefer imageUrl if available, else fallback to imageResId
+        if (!imageUrl.isNullOrEmpty()) {
+            Glide.with(this)
+                .load(imageUrl)
+                .placeholder(R.drawable.ic_profile_placeholder)
+                .centerCrop()
+                .into(dogImage)
+        } else if (imageResId != -1) {
             dogImage.setImageResource(imageResId)
         }
 
