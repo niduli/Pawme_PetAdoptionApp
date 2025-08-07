@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.pawmepetadoptionapp.R
 
 class DogAdapter(
@@ -36,10 +37,21 @@ class DogAdapter(
 
     override fun onBindViewHolder(holder: DogViewHolder, position: Int) {
         val dog = dogs[position]
-//        holder.dogImage.setImageResource(dog.imageResId)
-        holder.dogImage.contentDescription = "Photo of ${dog.name}"
         holder.dogName.text = dog.name
-        holder.dogDetails.text = "${dog.age} years old • ${dog.Breed}"    }
+        holder.dogDetails.text = "${dog.age} years old • ${dog.Breed}"
+
+        // Load the image from the URL using Glide
+        if (!dog.imageUrl.isNullOrEmpty()) {
+            Glide.with(holder.itemView.context)
+                .load(dog.imageUrl)
+                .placeholder(R.drawable.ic_profile_placeholder) // Optional placeholder
+                .centerCrop()
+                .into(holder.dogImage)
+        } else {
+            holder.dogImage.setImageResource(R.drawable.ic_profile_placeholder)
+        }
+        holder.dogImage.contentDescription = "Photo of ${dog.name}"
+    }
 
     override fun getItemCount(): Int = dogs.size
 }
