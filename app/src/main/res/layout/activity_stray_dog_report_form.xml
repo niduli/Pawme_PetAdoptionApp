@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <TextView
+                android:id="@+id/appNamePaw"
+                android:text="@string/app_name_paw"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                android:textColor="@color/soft_coral"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAccessibility="yes"
+                android:labelFor="@id/appNameAlert" />
+
+            <TextView
+                android:id="@+id/appNameAlert"
+                android:text="@string/app_name_alert"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAccessibility="no" />
+        </LinearLayout>
+
+        <!-- Slogan -->
+        <TextView
+            android:id="@+id/appSlogan"
+            android:text="@string/app_slogan"
+            android:textSize="16sp"
+            android:textStyle="italic"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="18dp"
+            android:importantForAccessibility="yes" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="8dp"
+            app:cardBackgroundColor="@android:color/white">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <!-- Location Input -->
+                <TextView
+                    android:text="@string/location_label"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <EditText
+                    android:id="@+id/editTextLocation"
+                    android:hint="@string/location_hint"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_rounded"
+                    android:padding="12dp"
+                    android:inputType="text"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@color/hint_gray"
+                    android:layout_marginBottom="8dp"
+                    android:autofillHints="postalAddress"
+                    android:importantForAutofill="yes" />
+                <Button
+                    android:id="@+id/buttonDropPin"
+                    android:text="@string/drop_pin_on_map"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@android:color/black"
+                    android:textColor="@android:color/white"
+                    android:layout_marginBottom="4dp" />
+                <TextView
+                    android:id="@+id/textViewCoordinates"
+                    android:text=""
+                    android:textColor="@color/soft_coral"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/soft_coral"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Photo Upload -->
+                <TextView
+                    android:text="@string/photos_label"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/photosRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="horizontal"
+                    android:contentDescription="@string/photos_content_desc" />
+                <Button
+                    android:id="@+id/buttonAddPhoto"
+                    android:text="@string/add_photo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@android:color/black"
+                    android:textColor="@android:color/white" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/soft_coral"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Description -->
+                <TextView
+                    android:text="@string/description_label"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <EditText
+                    android:id="@+id/editTextDescription"
+                    android:hint="@string/description_hint"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minLines="2"
+                    android:maxLines="4"
+                    android:background="@drawable/edittext_rounded"
+                    android:padding="12dp"
+                    android:inputType="textMultiLine"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@color/hint_gray"
+                    android:layout_marginBottom="8dp"
+                    android:autofillHints="text"
+                    android:importantForAutofill="yes" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/soft_coral"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Date/Time Pickers -->
+                <TextView
+                    android:text="@string/date_spotted_label"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <Button
+                    android:id="@+id/buttonPickDate"
+                    android:text="@string/pick_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@android:color/black"
+                    android:textColor="@android:color/white"
+                    android:layout_marginBottom="4dp" />
+                <TextView
+                    android:id="@+id/textViewDate"
+                    android:text=""
+                    android:textColor="@color/soft_coral"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:text="@string/time_spotted_label"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp" />
+                <Button
+                    android:id="@+id/buttonPickTime"
+                    android:text="@string/pick_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@android:color/black"
+                    android:textColor="@android:color/white"
+                    android:layout_marginBottom="4dp" />
+                <TextView
+                    android:id="@+id/textViewTime"
+                    android:text=""
+                    android:textColor="@color/soft_coral"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/soft_coral"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Contact Info (Optional) -->
+                <TextView
+                    android:text="@string/contact_info_label"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <EditText
+                    android:id="@+id/editTextContact"
+                    android:hint="@string/contact_hint"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_rounded"
+                    android:padding="12dp"
+                    android:inputType="textEmailAddress|text"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@color/hint_gray"
+                    android:layout_marginBottom="8dp"
+                    android:autofillHints="emailAddress"
+                    android:importantForAutofill="yes" />
+
+                <!-- Submit Button -->
+                <Button
+                    android:id="@+id/buttonSubmit"
+                    android:text="@string/submit_report"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@android:color/black"
+                    android:textColor="@android:color/white"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="8dp" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+</ScrollView>

@@ -17,7 +17,7 @@
 
     <!-- Available Tasks -->
     <string name="task_list">List of available tasks</string>
-    <string name="location_label">Location: %1$s</string>
+    <string name="available_task_location_label">Location: %1$s</string>
     <string name="time_label">Time: %1$s</string>
     <string name="duration_label">Duration: %1$s</string>
     <string name="required_skills_label">Basic animal care, time management</string>
@@ -72,6 +72,24 @@
     <string name="history_slogan">Every Pawprint Tells a Story – Here\'s a Glimpse of Your Journey in Pet Volunteering.</string>
 
     <string name="paw_icon">Paw Icon</string>
+
+    <string name="app_name_paw">Paw</string>
+    <string name="app_name_alert">Alert</string>
+    <string name="app_slogan">See a Stray, Help Right Away!</string>
+    <string name="location_label">Location</string>
+    <string name="location_hint">Enter location or use map (Long press for GPS)</string>
+    <string name="drop_pin_on_map">Drop Pin on Map</string>
+    <string name="photos_label">Photos</string>
+    <string name="photos_content_desc">List of selected stray dog photos for report preview</string>
+    <string name="add_photo">Add Photo</string>
+    <string name="description_hint">Age, color, behavior, health condition, etc.</string>
+    <string name="date_spotted_label">Date Spotted</string>
+    <string name="pick_date">Pick Date</string>
+    <string name="time_spotted_label">Time Spotted</string>
+    <string name="pick_time">Pick Time</string>
+    <string name="contact_info_label">Contact Info (Optional)</string>
+    <string name="contact_hint">Your phone/email</string>
+    <string name="submit_report">Submit Report</string>
 
 
 </resources>
