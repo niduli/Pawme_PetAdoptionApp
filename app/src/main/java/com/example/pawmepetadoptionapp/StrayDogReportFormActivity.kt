@@ -20,6 +20,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -36,6 +38,10 @@ class StrayDogReportFormActivity : AppCompatActivity() {
 
     private val LOCATION_PERMISSION_REQUEST_CODE = 1002
     private val CAMERA_PERMISSION_REQUEST_CODE = 2001
+
+    // Firebase references
+    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     // For picking multiple photos from gallery
     private val pickPhotoLauncher = registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris: List<Uri>? ->
@@ -111,7 +117,6 @@ class StrayDogReportFormActivity : AppCompatActivity() {
         val editTextContact = findViewById<EditText>(R.id.editTextContact)
         val buttonSubmit = findViewById<Button>(R.id.buttonSubmit)
 
-        // RecyclerView for photos
         val photosRecyclerView = findViewById<RecyclerView>(R.id.photosRecyclerView)
         photoAdapter = PhotoAdapter(photoUris) { pos ->
             photoUris.removeAt(pos)
@@ -120,7 +125,6 @@ class StrayDogReportFormActivity : AppCompatActivity() {
         photosRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         photosRecyclerView.adapter = photoAdapter
 
-        // Add photo button
         val buttonAddPhoto = findViewById<Button>(R.id.buttonAddPhoto)
         buttonAddPhoto.setOnClickListener {
             val options = arrayOf("Camera", "Gallery")
@@ -128,7 +132,6 @@ class StrayDogReportFormActivity : AppCompatActivity() {
                 .setTitle("Add Photo")
                 .setItems(options) { _, which ->
                     if (which == 0) {
-                        // Camera
                         val photoFile = createImageFile()
                         val uri = FileProvider.getUriForFile(
                             this,
@@ -138,14 +141,12 @@ class StrayDogReportFormActivity : AppCompatActivity() {
                         imageUri = uri
                         cameraLauncher.launch(uri)
                     } else {
-                        // Gallery (allow multiple)
                         pickPhotoLauncher.launch("image/*")
                     }
                 }
                 .show()
         }
 
-        // Date Picker
         val calendar = Calendar.getInstance()
         buttonPickDate.setOnClickListener {
             DatePickerDialog(
@@ -161,7 +162,6 @@ class StrayDogReportFormActivity : AppCompatActivity() {
             ).show()
         }
 
-        // Time Picker
         buttonPickTime.setOnClickListener {
             TimePickerDialog(
                 this,
@@ -177,24 +177,22 @@ class StrayDogReportFormActivity : AppCompatActivity() {
             ).show()
         }
 
-        // Drop Pin on Map (address handled via MapActivity)
         buttonDropPin.setOnClickListener {
             val intent = Intent(this, MapActivity::class.java)
             mapLauncher.launch(intent)
         }
 
-        // Location field is now set only by map (no long press for current location)
         editTextLocation.isFocusable = false
         editTextLocation.isClickable = false
 
-        // Submit Button
         buttonSubmit.setOnClickListener {
             val location = editTextLocation.text.toString()
             val description = editTextDescription.text.toString()
             val date = textViewDate.text.toString()
             val time = textViewTime.text.toString()
             val contact = editTextContact.text.toString()
-            val photosList = photoUris.map { it.toString() }
+            val latLng = pickedLatLng
+            val userId = auth.currentUser?.uid ?: "anonymous"
 
             if (location.isBlank() || description.isBlank() || date.isBlank() || time.isBlank() || photoUris.isEmpty()) {
                 Toast.makeText(
@@ -204,15 +202,14 @@ class StrayDogReportFormActivity : AppCompatActivity() {
                 ).show()
                 return@setOnClickListener
             }
-            Toast.makeText(
-                this,
-                getString(R.string.report_submitted_ui_only),
-                Toast.LENGTH_LONG
-            ).show()
-            finish()
+
+            // Replace this with your Cloudinary upload logic and get photo URLs
+            // For now, just pass the local URI strings as placeholders
+            val photoUrlStrings = photoUris.map { it.toString() }
+
+            saveReportToFirestore(location, description, date, time, contact, latLng, photoUrlStrings, userId)
         }
 
-        // Bottom Navigation setup
         val bottomNav = findViewById<BottomNavigationView>(R.id.volunteerBottomNav)
         bottomNav.selectedItemId = R.id.nav_paw_alert
         bottomNav.setOnNavigationItemSelectedListener { item ->
@@ -233,13 +230,45 @@ class StrayDogReportFormActivity : AppCompatActivity() {
                     startActivity(Intent(this, HistoryActivity::class.java))
                     true
                 }
-                R.id.nav_paw_alert -> {
-                    // Already in StrayDogReportFormActivity
-                    true
-                }
+                R.id.nav_paw_alert -> true
                 else -> false
             }
         }
+    }
+
+    private fun saveReportToFirestore(
+        location: String,
+        description: String,
+        date: String,
+        time: String,
+        contact: String,
+        latLng: Pair<Double, Double>?,
+        photoUrls: List<String>,
+        userId: String
+    ) {
+        val report = hashMapOf(
+            "location" to location,
+            "description" to description,
+            "date" to date,
+            "time" to time,
+            "contact" to contact,
+            "photoUrls" to photoUrls,
+            "userId" to userId,
+            "createdAt" to System.currentTimeMillis()
+        )
+        if (latLng != null) {
+            report["latitude"] = latLng.first
+            report["longitude"] = latLng.second
+        }
+        db.collection("stray_dog_reports")
+            .add(report)
+            .addOnSuccessListener {
+                Toast.makeText(this, getString(R.string.report_submitted_successfully), Toast.LENGTH_LONG).show()
+                finish()
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Failed to submit report: ${exception.message}", Toast.LENGTH_LONG).show()
+            }
     }
 
     private fun createImageFile(): File {
