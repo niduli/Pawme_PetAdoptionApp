@@ -53,7 +53,7 @@ class StrayDogReportFormActivity : AppCompatActivity() {
         }
     }
 
-    // For picking location from the map (now returns address too)
+    // For picking location from the map (returns address and lat/lng)
     private val mapLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK && result.data != null) {
             val address = result.data?.getStringExtra("address")
@@ -199,14 +199,14 @@ class StrayDogReportFormActivity : AppCompatActivity() {
             if (location.isBlank() || description.isBlank() || date.isBlank() || time.isBlank() || photoUris.isEmpty()) {
                 Toast.makeText(
                     this,
-                    "Please fill all required fields and add at least one photo.",
+                    getString(R.string.please_fill_fields_and_photos),
                     Toast.LENGTH_LONG
                 ).show()
                 return@setOnClickListener
             }
             Toast.makeText(
                 this,
-                "Report submitted! (UI only, backend next step)",
+                getString(R.string.report_submitted_ui_only),
                 Toast.LENGTH_LONG
             ).show()
             finish()
@@ -253,8 +253,6 @@ class StrayDogReportFormActivity : AppCompatActivity() {
         }
     }
 
-    // Remove old onActivityResult, use ActivityResult API instead
-
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -266,13 +264,13 @@ class StrayDogReportFormActivity : AppCompatActivity() {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(
                         this,
-                        "Camera permission granted. You can now take photos.",
+                        getString(R.string.camera_permission_granted),
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
                     Toast.makeText(
                         this,
-                        "Camera permission denied.",
+                        getString(R.string.camera_permission_denied),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -281,13 +279,13 @@ class StrayDogReportFormActivity : AppCompatActivity() {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(
                         this,
-                        "Location permission granted.",
+                        getString(R.string.location_permission_granted),
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
                     Toast.makeText(
                         this,
-                        "Location permission denied.",
+                        getString(R.string.location_permission_denied),
                         Toast.LENGTH_SHORT
                     ).show()
                 }

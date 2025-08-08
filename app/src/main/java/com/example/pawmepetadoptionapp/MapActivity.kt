@@ -26,7 +26,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     private var droppedAddress: String? = null
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
-    private val locationPermissionRequestCode = 1002
+    private val LOCATION_PERMISSION_REQUEST_CODE = 1002
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,11 +43,11 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                 val intent = Intent()
                 intent.putExtra("lat", droppedLatLng!!.latitude)
                 intent.putExtra("lng", droppedLatLng!!.longitude)
-                intent.putExtra("address", droppedAddress)
+                intent.putExtra("address", droppedAddress ?: "")
                 setResult(RESULT_OK, intent)
                 finish()
             } else {
-                Toast.makeText(this, "Please pick a location on the map!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.please_pick_location_on_map), Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -68,7 +68,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                         Manifest.permission.ACCESS_FINE_LOCATION,
                         Manifest.permission.ACCESS_COARSE_LOCATION
                     ),
-                    locationPermissionRequestCode
+                    LOCATION_PERMISSION_REQUEST_CODE
                 )
             } else {
                 fusedLocationClient.lastLocation.addOnSuccessListener { location ->
@@ -76,7 +76,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                         val latLng = LatLng(location.latitude, location.longitude)
                         map.clear()
                         map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f))
-                        val markerOptions = MarkerOptions().position(latLng).title("Your Current Location")
+                        val markerOptions = MarkerOptions().position(latLng).title(getString(R.string.pick_current_location))
                         val geocoder = Geocoder(this, Locale.getDefault())
                         val addressText = try {
                             val addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
@@ -91,7 +91,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                         map.addMarker(markerOptions)
                         droppedLatLng = latLng
                     } else {
-                        Toast.makeText(this, "Unable to get current location!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, getString(R.string.unable_to_get_current_location), Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -105,7 +105,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
         map.setOnMapClickListener { latLng ->
             map.clear()
-            val markerOptions = MarkerOptions().position(latLng).title("Picked Location")
+            val markerOptions = MarkerOptions().position(latLng).title(getString(R.string.confirm_location))
             val geocoder = Geocoder(this, Locale.getDefault())
             val addressText = try {
                 val addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)

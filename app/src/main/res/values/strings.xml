@@ -77,8 +77,11 @@
     <string name="app_name_alert">Alert</string>
     <string name="app_slogan">See a Stray, Help Right Away!</string>
     <string name="location_label">Location</string>
-    <string name="location_hint">Enter location or use map (Long press for GPS)</string>
-    <string name="drop_pin_on_map">Drop Pin on Map</string>
+    <string name="location_hint">Enter location or use map</string>
+    <string name="drop_pin_on_map">Pick Location From Map</string>
+    <string name="pick_current_location">Pick Current Location</string>
+    <string name="confirm_location">Confirm Location</string>
+    <string name="coordinates_format">Coordinates: %1$.4f, %2$.4f</string>
     <string name="photos_label">Photos</string>
     <string name="photos_content_desc">List of selected stray dog photos for report preview</string>
     <string name="add_photo">Add Photo</string>
@@ -90,9 +93,15 @@
     <string name="contact_info_label">Contact Info (Optional)</string>
     <string name="contact_hint">Your phone/email</string>
     <string name="submit_report">Submit Report</string>
-    <string name="coordinates_format">Coordinates: %1$.4f, %2$.4f</string>
-    <string name="confirm_location">Confirm Location</string>
-    <string name="pick_current_location">Pick Current Location</string>
-
-
+    <string name="please_fill_fields_and_photos">Please fill all required fields and add at least one photo.</string>
+    <string name="report_submitted_ui_only">Report submitted! (UI only, backend next step)</string>
+    <string name="camera_permission_granted">Camera permission granted. You can now take photos.</string>
+    <string name="camera_permission_denied">Camera permission denied.</string>
+    <string name="location_permission_granted">Location permission granted.</string>
+    <string name="location_permission_denied">Location permission denied.</string>
+    <string name="unable_to_get_current_location">Unable to get current location!</string>
+    <string name="please_pick_location_on_map">Please pick a location on the map!</string>
 </resources>
+
+
+
