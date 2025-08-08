@@ -15,10 +15,11 @@ object AssignedTasksStore {
         }
     }
 
-
-
     fun removeTask(task: AssignedTask) {
         assignedTasks.remove(task)
     }
 
+    fun clearTasks() {
+        assignedTasks.clear()
+    }
 }

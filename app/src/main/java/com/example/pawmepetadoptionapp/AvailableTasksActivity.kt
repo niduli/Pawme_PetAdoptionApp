@@ -53,10 +53,7 @@ class AvailableTasksActivity : AppCompatActivity() {
                     startActivity(Intent(this, VolunteerDashboardActivity::class.java))
                     true
                 }
-                R.id.nav_available_tasks -> {
-                    // Already in AvailableTasksActivity
-                    true
-                }
+                R.id.nav_available_tasks -> true
                 R.id.nav_my_schedule -> {
                     startActivity(Intent(this, MyScheduleActivity::class.java))
                     true

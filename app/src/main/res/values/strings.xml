@@ -101,6 +101,7 @@
     <string name="location_permission_denied">Location permission denied.</string>
     <string name="unable_to_get_current_location">Unable to get current location!</string>
     <string name="please_pick_location_on_map">Please pick a location on the map!</string>
+    <string name="report_submitted_successfully">Report submitted successfully!</string>
 </resources>
 
 
