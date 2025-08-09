@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
 
 
 class CurrentFostersFragment : Fragment() {
@@ -184,14 +185,24 @@ class CurrentFostersFragment : Fragment() {
                 if (diffDays >= 0) "Foster days remaining: $diffDays"
                 else "Foster end date invalid"
 
-            // Load dog image from drawable
-            val resId = holder.itemView.context.resources.getIdentifier(
-                dog.imageResName, "drawable", holder.itemView.context.packageName
-            )
-            if (resId != 0) {
-                holder.imgDog.setImageResource(resId)
+            val imageUrl = dog.imageResName
+            if (imageUrl.startsWith("http")) {
+                // Load from URL with Glide
+                Glide.with(holder.itemView.context)
+                    .load(imageUrl)
+                    .placeholder(R.drawable.sample_dog) // fallback image while loading
+                    .error(R.drawable.sample_dog)       // fallback if load fails
+                    .into(holder.imgDog)
             } else {
-                holder.imgDog.setImageResource(R.drawable.sample_dog) // fallback image
+                // Load from drawable resource (legacy or fallback)
+                val resId = holder.itemView.context.resources.getIdentifier(
+                    imageUrl, "drawable", holder.itemView.context.packageName
+                )
+                if (resId != 0) {
+                    holder.imgDog.setImageResource(resId)
+                } else {
+                    holder.imgDog.setImageResource(R.drawable.sample_dog)
+                }
             }
 
             // Handle EXTEND button click
