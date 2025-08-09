@@ -43,6 +43,7 @@ class AdoptionActivity : AppCompatActivity() {
         loadDogsFromFirestore()
 
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
+        bottomNav.setBackgroundColor(android.R.color.white)
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> {

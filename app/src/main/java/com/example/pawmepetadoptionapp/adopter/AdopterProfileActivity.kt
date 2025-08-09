@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.cloudinary.android.MediaManager
 import com.cloudinary.android.callback.UploadCallback
@@ -72,27 +73,43 @@ class AdopterProfileActivity : AppCompatActivity() {
         }
 
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
+
+        // Optional: ensure actual white color is applied
+        bottomNav.setBackgroundColor(ContextCompat.getColor(this, android.R.color.white))
+
+        // Mark the current tab as selected so it stays highlighted
+        bottomNav.selectedItemId = R.id.nav_profile
+
+        // Avoid re-launching the same screen and keep selection state correct
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> {
-                    val intent = Intent(this, AdoptionActivity::class.java)
-                    startActivity(intent)
+                    if (bottomNav.selectedItemId != R.id.nav_home) {
+                        startActivity(Intent(this, AdoptionActivity::class.java))
+                        overridePendingTransition(0, 0)
+                        finish()
+                    }
                     true
                 }
                 R.id.nav_profile -> {
-                    val intent = Intent(this, AdopterProfileActivity::class.java)
-                    startActivity(intent)
+                    // Already here; do nothing, keep it selected
                     true
                 }
                 R.id.action_logout -> {
-                    val intent = Intent(this, SignInActivity::class.java)
-                    startActivity(intent)
-                    finish()
+                    FirebaseAuth.getInstance().signOut()
+                    startActivity(
+                        Intent(this, SignInActivity::class.java).apply {
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        }
+                    )
                     true
                 }
                 else -> false
             }
         }
+
+        // Optional: ignore reselection to prevent reloading current screen
+        bottomNav.setOnItemReselectedListener { /* no-op */ }
     }
 
     private fun loadProfile() {
@@ -200,7 +217,8 @@ class AdopterProfileActivity : AppCompatActivity() {
                     runOnUiThread { callback(null) }
                 }
             }).dispatch()
-    }}
+    }
+}
 
 data class User(
     var username: String? = null,
