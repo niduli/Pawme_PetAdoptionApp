@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pawmepetadoptionapp.R
+import com.example.pawmepetadoptionapp.admin.ActivityAdminStrayReportsList
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -20,6 +21,7 @@ class ActivityAdminDashboard : AppCompatActivity() {
     private lateinit var tvFostersCount: TextView
     private lateinit var tvAdoptersCount: TextView
     private lateinit var tvVaccinationsCount: TextView
+    private lateinit var tvStrayReportsCount: TextView
 
     private lateinit var cardUsers: MaterialCardView
     private lateinit var cardDogs: MaterialCardView
@@ -28,6 +30,7 @@ class ActivityAdminDashboard : AppCompatActivity() {
     private lateinit var cardFosters: MaterialCardView
     private lateinit var cardAdopters: MaterialCardView
     private lateinit var cardVaccinations: MaterialCardView
+    private lateinit var cardStrayReports: MaterialCardView
 
     private lateinit var btnLogout: Button
     private lateinit var db: FirebaseFirestore
@@ -56,6 +59,7 @@ class ActivityAdminDashboard : AppCompatActivity() {
         tvFostersCount = findViewById(R.id.tvFostersCount)
         tvAdoptersCount = findViewById(R.id.tvAdoptersCount)
         tvVaccinationsCount = findViewById(R.id.tvVaccinationsCount)
+        tvStrayReportsCount = findViewById(R.id.tvStrayReportsCount)
 
         // Initialize cards
         cardUsers = findViewById(R.id.cardUsers)
@@ -65,6 +69,7 @@ class ActivityAdminDashboard : AppCompatActivity() {
         cardFosters = findViewById(R.id.cardFosters)
         cardAdopters = findViewById(R.id.cardAdopters)
         cardVaccinations = findViewById(R.id.cardVaccinations)
+        cardStrayReports = findViewById(R.id.cardStrayReports)
 
         // Fetch counts from Firestore
         fetchCollectionCount("users", tvUsersCount)
@@ -74,34 +79,32 @@ class ActivityAdminDashboard : AppCompatActivity() {
         fetchCollectionCount("fosters", tvFostersCount)
         fetchCollectionCount("adopters", tvAdoptersCount)
         fetchCollectionCount("vaccinations", tvVaccinationsCount)
+        fetchCollectionCount("stray_dog_reports", tvStrayReportsCount)
 
         // Set click listeners for navigation
         cardUsers.setOnClickListener {
             startActivity(Intent(this, UserManagementActivity::class.java))
         }
-
         cardDogs.setOnClickListener {
             startActivity(Intent(this, DogManagementActivity::class.java))
         }
-
         cardDonations.setOnClickListener {
             // startActivity(Intent(this, DonationManagementActivity::class.java))
         }
-
         cardVolunteers.setOnClickListener {
-             startActivity(Intent(this, AdminVolunteerListActivity::class.java))
+            startActivity(Intent(this, AdminVolunteerListActivity::class.java))
         }
-
         cardFosters.setOnClickListener {
             // startActivity(Intent(this, FosterManagementActivity::class.java))
         }
-
         cardAdopters.setOnClickListener {
-             startActivity(Intent(this, AdoptersManagementActivity::class.java))
+            startActivity(Intent(this, AdoptersManagementActivity::class.java))
         }
-
         cardVaccinations.setOnClickListener {
             startActivity(Intent(this, ActivityVaccination::class.java))
+        }
+        cardStrayReports.setOnClickListener {
+            startActivity(Intent(this, ActivityAdminStrayReportsList::class.java))
         }
 
         // Optional: Logout functionality
@@ -112,7 +115,6 @@ class ActivityAdminDashboard : AppCompatActivity() {
         //     finish()
         // }
     }
-
 
     private fun fetchCollectionCount(collectionName: String, textView: TextView) {
         db.collection(collectionName)
