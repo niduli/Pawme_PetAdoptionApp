@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pawmepetadoptionapp.databinding.ActivityMyScheduleBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -50,22 +51,43 @@ class MyScheduleActivity : AppCompatActivity() {
         binding.scheduleRecyclerView.adapter = adapter
 
         fetchScheduledTasks()
+
+        // Bottom Navigation setup
+        val bottomNav = findViewById<BottomNavigationView>(R.id.volunteerBottomNav)
+        bottomNav.selectedItemId = R.id.nav_my_schedule
+        bottomNav.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home -> {
+                    startActivity(Intent(this, VolunteerDashboardActivity::class.java))
+                    true
+                }
+                R.id.nav_available_tasks -> {
+                    startActivity(Intent(this, AvailableTasksActivity::class.java))
+                    true
+                }
+                R.id.nav_my_schedule -> true
+                R.id.nav_history -> {
+                    startActivity(Intent(this, HistoryActivity::class.java))
+                    true
+                }
+                R.id.nav_paw_alert -> {
+                    startActivity(Intent(this, StrayDogReportFormActivity::class.java))
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private fun fetchScheduledTasks() {
-        db.collection("schedules")
+        db.collection("assigned_tasks")
             .whereEqualTo("userId", userId)
             .get()
             .addOnSuccessListener { documents ->
                 taskList.clear()
                 for (doc in documents) {
-                    val task = AssignedTask(
-                        name = doc.getString("name") ?: "N/A",
-                        time = doc.getString("time") ?: "N/A",
-                        location = doc.getString("location") ?: "N/A",
-                        status = doc.getString("status") ?: "Upcoming"
-                    )
+                    val task = doc.toObject(AssignedTask::class.java)
                     taskList.add(task)
                 }
                 adapter.notifyDataSetChanged()
@@ -77,52 +99,31 @@ class MyScheduleActivity : AppCompatActivity() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun cancelTask(task: AssignedTask) {
-        // Remove from Firestore schedules collection
-        db.collection("schedules")
+        db.collection("assigned_tasks")
             .whereEqualTo("userId", userId)
             .whereEqualTo("name", task.name)
             .get()
             .addOnSuccessListener { documents ->
                 for (doc in documents) {
-                    db.collection("schedules").document(doc.id).delete()
+                    db.collection("assigned_tasks").document(doc.id).delete()
                 }
                 taskList.remove(task)
                 adapter.notifyDataSetChanged()
                 Toast.makeText(this, "Task cancelled", Toast.LENGTH_SHORT).show()
-
-                // Optionally, update task status in tasks collection to "open"
-                resetTaskStatus(task.name)
             }
             .addOnFailureListener {
                 Toast.makeText(this, "Failed to cancel task: ${it.message}", Toast.LENGTH_LONG).show()
             }
     }
 
-    private fun resetTaskStatus(taskName: String) {
-        db.collection("tasks")
-            .whereEqualTo("name", taskName)
-            .get()
-            .addOnSuccessListener { documents ->
-                for (doc in documents) {
-                    db.collection("tasks").document(doc.id)
-                        .update(
-                            mapOf(
-                                "status" to "open",
-                                "assignedTo" to null
-                            )
-                        )
-                }
-            }
-    }
-
     private fun updateTaskStatus(task: AssignedTask, newStatus: String) {
-        db.collection("schedules")
+        db.collection("assigned_tasks")
             .whereEqualTo("userId", userId)
             .whereEqualTo("name", task.name)
             .get()
             .addOnSuccessListener { documents ->
                 for (doc in documents) {
-                    db.collection("schedules").document(doc.id)
+                    db.collection("assigned_tasks").document(doc.id)
                         .update("status", newStatus)
                 }
                 val index = taskList.indexOf(task)
