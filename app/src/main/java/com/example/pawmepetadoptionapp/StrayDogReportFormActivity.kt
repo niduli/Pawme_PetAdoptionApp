@@ -233,8 +233,7 @@ class StrayDogReportFormActivity : AppCompatActivity() {
         }
     }
 
-    /* Replacement for hasBeenInitialized(): try calling MediaManager.get().
-       If it throws IllegalStateException, not initialized yet. */
+
     private fun isCloudinaryInitialized(): Boolean =
         try {
             MediaManager.get()
