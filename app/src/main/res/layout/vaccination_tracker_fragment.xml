@@ -24,7 +24,7 @@
 
 
     <TextView
-        android:text="Vaccination Shedule"
+        android:text="Vaccination Schedule"
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_marginBottom="6dp"
