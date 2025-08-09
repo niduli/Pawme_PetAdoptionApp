@@ -73,6 +73,7 @@ class AdoptionActivity : AppCompatActivity() {
         val db = FirebaseFirestore.getInstance()
         db.collection("dogs")
             .whereEqualTo("available", true)
+            .whereEqualTo("type","adoption")
             .get()
             .addOnSuccessListener { result ->
                 dogList.clear()
