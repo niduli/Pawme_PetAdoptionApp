@@ -72,7 +72,8 @@ class AvailableTasksActivity : AppCompatActivity() {
     }
 
     private fun fetchTasksFromFirestore() {
-        db.collection("volunteer_tasks")
+        db.collection("tasks")
+            .whereEqualTo("status", "unassigned")
             .get()
             .addOnSuccessListener { result ->
                 allTasks.clear()
