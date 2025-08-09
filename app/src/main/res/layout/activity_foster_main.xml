@@ -40,11 +40,13 @@
                 android:layout_height="28dp"
                 android:layout_marginEnd="4dp"
                 android:src="@drawable/menu_icon"
-                android:contentDescription="Menu Icon"
+                android:contentDescription="Menu"
                 android:scaleType="fitCenter"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:clickable="true"
+                android:focusable="true" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.appcompat.widget.Toolbar>

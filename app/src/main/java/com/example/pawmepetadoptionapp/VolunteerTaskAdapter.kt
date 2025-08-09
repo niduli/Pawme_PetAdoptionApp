@@ -10,11 +10,15 @@ import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import android.widget.Filter
 import android.widget.Filterable
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class VolunteerTaskAdapter(private val taskList: List<VolunteerTask>) :
     RecyclerView.Adapter<VolunteerTaskAdapter.TaskViewHolder>(), Filterable {
 
     private var filteredTaskList = taskList.toMutableList()
+    private val db = FirebaseFirestore.getInstance()
+    private val auth = FirebaseAuth.getInstance()
 
     class TaskViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val title: TextView = view.findViewById(R.id.taskTitle)
@@ -61,12 +65,26 @@ class VolunteerTaskAdapter(private val taskList: List<VolunteerTask>) :
                 .create()
 
             confirmBtn.setOnClickListener {
-                val assignedTask = AssignedTask(task.title, task.time, task.location, "Confirmed")
-                AssignedTasksStore.addTask(assignedTask)
-                Toast.makeText(context, "Task added to your schedule!", Toast.LENGTH_SHORT).show()
-                dialog.dismiss()
+                val userId = auth.currentUser?.uid ?: ""
+                val assignedTask = AssignedTask(
+                    name = task.title,
+                    time = task.time,
+                    location = task.location,
+                    status = "Confirmed",
+                    userId = userId
+                )
 
-                context.startActivity(Intent(context, MyScheduleActivity::class.java))
+                // Save assigned task to Firebase
+                db.collection("assigned_tasks")
+                    .add(assignedTask)
+                    .addOnSuccessListener {
+                        Toast.makeText(context, "Task added to your schedule!", Toast.LENGTH_SHORT).show()
+                        dialog.dismiss()
+                        context.startActivity(Intent(context, MyScheduleActivity::class.java))
+                    }
+                    .addOnFailureListener { e ->
+                        Toast.makeText(context, "Failed to assign task. Try again.", Toast.LENGTH_SHORT).show()
+                    }
             }
 
             dialog.show()
@@ -101,4 +119,3 @@ class VolunteerTaskAdapter(private val taskList: List<VolunteerTask>) :
         }
     }
 }
-

@@ -10,6 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import com.bumptech.glide.Glide
 import com.example.pawmepetadoptionapp.Available_dogs.FosterDogs
 import com.example.pawmepetadoptionapp.R
 import com.google.firebase.auth.FirebaseAuth
@@ -36,8 +37,11 @@ class DogProfileDialog(
         val txtDetails = view.findViewById<TextView>(R.id.txtDogDetails)
         val btnChoose = view.findViewById<Button>(R.id.btnChooseFoster)
 
-        val resId = resources.getIdentifier(dog.imageName, "drawable", requireContext().packageName)
-        imgDog.setImageResource(resId)
+        Glide.with(requireContext())
+            .load(dog.imageName) // URL from Firestore
+            .placeholder(R.drawable.sample_dog)
+            .error(R.drawable.sample_dog)
+            .into(imgDog)
         txtName.text = dog.name
         txtDetails.text = "${dog.breed} | ${dog.age} | ${dog.needs}"
 
@@ -74,7 +78,7 @@ class DogProfileDialog(
         // Parse duration field (e.g., "2 weeks", "5 days")
         val durationParts = dog.duration.split(" ")
         val number = durationParts[0].toIntOrNull() ?: 0
-        val unit = durationParts[1].lowercase()
+        val unit = durationParts.getOrNull(1)?.lowercase() ?: "days"
 
         // Calculate foster end date
         val calendar = Calendar.getInstance()

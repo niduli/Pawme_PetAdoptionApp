@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.pawmepetadoptionapp.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -59,12 +60,27 @@ class PastFostersFragment : Fragment() {
                     "Fostered: ${dog.startDate} - ${dog.endDate}"
 
                 // Set dog image
-                val resId = view.context.resources.getIdentifier(
-                    dog.imageResName, "drawable", view.context.packageName
-                )
-                view.findViewById<ImageView>(R.id.imageDog).setImageResource(
-                    if (resId != 0) resId else R.drawable.sample_dog
-                )
+                val imageView = view.findViewById<ImageView>(R.id.imageDog)
+                val imageUrl = dog.imageResName
+
+                if (imageUrl.startsWith("http")) {
+                    // Load from URL using Glide
+                    Glide.with(view.context)
+                        .load(imageUrl)
+                        .placeholder(R.drawable.sample_dog) // image shown while loading
+                        .error(R.drawable.sample_dog)       // image shown if loading fails
+                        .into(imageView)
+                } else {
+                    // Load from drawable resource fallback
+                    val resId = view.context.resources.getIdentifier(
+                        imageUrl, "drawable", view.context.packageName
+                    )
+                    if (resId != 0) {
+                        imageView.setImageResource(resId)
+                    } else {
+                        imageView.setImageResource(R.drawable.sample_dog)
+                    }
+                }
 
                 // Set up click listener for the Details button
                 view.findViewById<Button>(R.id.btnDetails).setOnClickListener {
@@ -76,7 +92,7 @@ class PastFostersFragment : Fragment() {
                         Start Date: ${dog.startDate}
                         End Date: ${dog.endDate}
                         Ended Early: ${if (dog.endedEarly) "Yes" else "No"}
-                        Reason: ${dog.endReason}
+                        End Reason: ${dog.endReason}
                     """.trimIndent()
 
                     textView.text = details
@@ -120,7 +136,7 @@ class PastFostersFragment : Fragment() {
                     val name = doc.getString("name") ?: continue
                     val imageResName = doc.getString("imageResName") ?: "sample_dog"
                     val startDate = doc.getString("fosterStartDate") ?: "-"
-                    val endDate = doc.getString("fosterStartDate") ?: "-"
+                    val endDate = doc.getString("fosterEndDate") ?: "-"
                     val reason = doc.getString("endReason") ?: "No reason provided"
                     val endedEarly = doc.getBoolean("endedEarly") ?: false
 

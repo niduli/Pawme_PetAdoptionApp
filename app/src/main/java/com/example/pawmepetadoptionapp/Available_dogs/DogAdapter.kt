@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.pawmepetadoptionapp.Available_dogs.FosterDogs
 
 
@@ -40,18 +41,11 @@ class DogAdapter(private val dogs: MutableList<FosterDogs>,
 
         // Get the image name from the dog object and convert it to a drawable resource ID
         val context = holder.itemView.context
-        val imageResId = context.resources.getIdentifier(
-            dog.imageName, // e.g., "dog1"
-            "drawable",
-            context.packageName
-        )
-
-        // If image is found, set it. Else use a default image
-        if (imageResId != 0) {
-            holder.dogImage.setImageResource(imageResId)
-        } else {
-            holder.dogImage.setImageResource(R.drawable.sample_dog)
-        }
+        Glide.with(context)
+            .load(dog.imageName) // Now it's a URL
+            .placeholder(R.drawable.sample_dog) // default while loading
+            .error(R.drawable.sample_dog) // fallback if fails
+            .into(holder.dogImage)
 
 
         holder.learnMore.setOnClickListener {

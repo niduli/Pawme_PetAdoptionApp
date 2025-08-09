@@ -1,5 +1,6 @@
 package com.example.pawmepetadoptionapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.EditorInfo
@@ -7,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pawmepetadoptionapp.databinding.ActivityAvailableTasksBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.FirebaseFirestore
 
 class AvailableTasksActivity : AppCompatActivity() {
@@ -40,6 +42,32 @@ class AvailableTasksActivity : AppCompatActivity() {
                 adapter.filter.filter(query)
                 true
             } else false
+        }
+
+        // Bottom Navigation setup
+        val bottomNav = findViewById<BottomNavigationView>(R.id.volunteerBottomNav)
+        bottomNav.selectedItemId = R.id.nav_available_tasks
+        bottomNav.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home -> {
+                    startActivity(Intent(this, VolunteerDashboardActivity::class.java))
+                    true
+                }
+                R.id.nav_available_tasks -> true
+                R.id.nav_my_schedule -> {
+                    startActivity(Intent(this, MyScheduleActivity::class.java))
+                    true
+                }
+                R.id.nav_history -> {
+                    startActivity(Intent(this, HistoryActivity::class.java))
+                    true
+                }
+                R.id.nav_paw_alert -> {
+                    startActivity(Intent(this, StrayDogReportFormActivity::class.java))
+                    true
+                }
+                else -> false
+            }
         }
     }
 
