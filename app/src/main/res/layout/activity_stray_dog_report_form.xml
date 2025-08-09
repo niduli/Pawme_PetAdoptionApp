@@ -98,8 +98,9 @@
                         android:layout_marginBottom="8dp"
                         android:autofillHints="postalAddress"
                         android:importantForAutofill="yes"
-                        android:focusable="false"
-                        android:clickable="false" />
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:clickable="true" />
                     <Button
                         android:id="@+id/buttonDropPin"
                         android:text="@string/drop_pin_on_map"
