@@ -5,6 +5,13 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <Spinner
+        android:id="@+id/spinnerDogSelector"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:prompt="@string/select_dog" />
+
     <Button
         android:id="@+id/btnAddVaccination"
         android:layout_width="wrap_content"

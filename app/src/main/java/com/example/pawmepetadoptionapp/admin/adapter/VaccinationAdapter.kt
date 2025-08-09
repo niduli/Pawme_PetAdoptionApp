@@ -23,23 +23,17 @@ class VaccinationAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = list[position]
-        holder.binding.tvDogName.text = item.dogName
-        holder.binding.tvVaccine.text = item.vaccine
         holder.binding.tvDate.text = "Date: ${item.date}"
-        holder.binding.tvDue.text = "Due: ${item.dueDate}"
-
-        // Remove edit button logic for now
-        holder.binding.btnEdit.setOnClickListener {
-            // Optionally implement edit using dialog fragment
-        }
+        holder.binding.tvStatus.text = "Status: ${item.status}"
+        holder.binding.tvVaccineName.text = "Vaccine: ${item.vaccineName}"
 
         holder.binding.btnDelete.setOnClickListener {
             AlertDialog.Builder(context)
                 .setTitle("Delete")
                 .setMessage("Are you sure you want to delete this vaccination?")
                 .setPositiveButton("Yes") { _, _ ->
-                    FirebaseFirestore.getInstance().collection("vaccinations").document(item.id!!)
-                        .delete()
+                    // You need to know the dogId to delete from the correct subcollection
+                    // This adapter should get dogId as an argument, or the activity should handle deletion
                 }
                 .setNegativeButton("No", null)
                 .show()
