@@ -165,6 +165,7 @@
             android:drawablePadding="10dp"
             android:background="@drawable/bg_input"
             android:inputType="number"
+            android:enabled="false"
             android:paddingStart="12dp"
             android:gravity="center_vertical" />
 

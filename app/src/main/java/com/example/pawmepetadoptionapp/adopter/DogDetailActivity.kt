@@ -23,12 +23,14 @@ class DogDetailActivity : AppCompatActivity() {
         val vaccinationBtn: Button = findViewById(R.id.vaccinationBtn)
         val adoptBtn: Button = findViewById(R.id.adoptBtn)
 
+        // Expect both dogId (document id) and name from the previous screen
+        val dogId = intent.getStringExtra("dogId") ?: ""   // IMPORTANT for subcollection path
         val name = intent.getStringExtra("name") ?: "Doggo"
         val age = intent.getStringExtra("age") ?: "Unknown"
         val breed = intent.getStringExtra("Breed") ?: "Unknown"
         val needs = intent.getStringExtra("needs") ?: "None"
         val imageResId = intent.getIntExtra("imageResId", -1)
-        val imageUrl = intent.getStringExtra("imageUrl") // get from intent
+        val imageUrl = intent.getStringExtra("imageUrl")
 
         dogName.text = name
         dogBreed.text = breed
@@ -36,7 +38,6 @@ class DogDetailActivity : AppCompatActivity() {
         dogNeeds.text = needs
         description.text = "$name is a loving and loyal companion looking for a forever home."
 
-        // Prefer imageUrl if available, else fallback to imageResId
         if (!imageUrl.isNullOrEmpty()) {
             Glide.with(this)
                 .load(imageUrl)
@@ -47,12 +48,12 @@ class DogDetailActivity : AppCompatActivity() {
             dogImage.setImageResource(imageResId)
         }
 
-        backButton.setOnClickListener {
-            finish()
-        }
+        backButton.setOnClickListener { finish() }
 
         vaccinationBtn.setOnClickListener {
             val intent = Intent(this, VaccinationHistoryActivity::class.java)
+            intent.putExtra("dogId", dogId)
+            intent.putExtra("dogName", name) // optional, for display
             startActivity(intent)
         }
 
