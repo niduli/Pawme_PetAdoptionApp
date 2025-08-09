@@ -36,7 +36,7 @@ class AdminVolunteerListActivity : AppCompatActivity() {
 
     private fun fetchVolunteers() {
         db.collection("users")
-            .whereEqualTo("role", "volunteer")
+            .whereEqualTo("role", "Volunteer")
             .get()
             .addOnSuccessListener { documents ->
                 volunteerList.clear()
