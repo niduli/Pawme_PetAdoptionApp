@@ -24,7 +24,7 @@
 
 
     <TextView
-        android:text="Upcoming Vaccines"
+        android:text="Vaccination Shedule"
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_marginBottom="6dp"

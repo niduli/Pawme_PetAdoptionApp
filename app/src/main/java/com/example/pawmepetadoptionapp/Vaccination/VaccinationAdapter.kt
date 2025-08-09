@@ -11,35 +11,63 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class VaccinationAdapter (private val items: List<VaccinationTrackerFragment.Vaccine>,
-                          private val onReminderSet: (VaccinationTrackerFragment.Vaccine) -> Unit
-) : RecyclerView.Adapter<VaccinationAdapter.VaccineViewHolder>() {
-    class VaccineViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val txtName: TextView = view.findViewById(R.id.txtVaccineName)
-        val txtDue: TextView = view.findViewById(R.id.txtVaccineDue)
-        val btnReminder: Button = view.findViewById(R.id.btnReminder)
+class VaccinationAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    private val groupedItems = mutableListOf<Any>() // Can hold String (header) or Vaccine
+
+    companion object {
+        private const val TYPE_HEADER = 0
+        private const val TYPE_VACCINE = 1
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VaccineViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.vaccination_item, parent, false)
-        return VaccineViewHolder(view)
+    fun updateData(vaccines: List<VaccinationTrackerFragment.Vaccine>) {
+        groupedItems.clear()
+
+        val groupedMap = vaccines.groupBy { it.dogName }
+        for ((dogName, vaccineList) in groupedMap) {
+            groupedItems.add(dogName) // Add header
+            groupedItems.addAll(vaccineList) // Add vaccines
+        }
+        notifyDataSetChanged()
     }
 
-    override fun onBindViewHolder(holder: VaccineViewHolder, position: Int) {
-        val vaccine = items[position]
-        val dateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
-        val dueText = if (vaccine.isCompleted) "Completed ✅" else "Due: ${dateFormat.format(Date(vaccine.date))}"
+    override fun getItemViewType(position: Int): Int {
+        return if (groupedItems[position] is String) TYPE_HEADER else TYPE_VACCINE
+    }
 
-        holder.txtName.text = vaccine.name
-        holder.txtDue.text = dueText
-
-        holder.btnReminder.visibility = if (vaccine.isCompleted || vaccine.isReminderSet) View.GONE else View.VISIBLE
-        holder.btnReminder.setOnClickListener {
-            onReminderSet(vaccine)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return if (viewType == TYPE_HEADER) {
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_dog_header, parent, false)
+            HeaderViewHolder(view)
+        } else {
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.vaccination_item, parent, false)
+            VaccineViewHolder(view)
         }
     }
 
-    override fun getItemCount(): Int = items.size
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder is HeaderViewHolder) {
+            holder.txtDogName.text = groupedItems[position] as String
+        } else if (holder is VaccineViewHolder) {
+            val vaccine = groupedItems[position] as VaccinationTrackerFragment.Vaccine
+            val dateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
+            val dueText = if (vaccine.isCompleted) "✔ Completed"
+            else "⏳ Due: ${dateFormat.format(Date(vaccine.date))}"
 
+            holder.txtName.text = vaccine.name
+            holder.txtDue.text = dueText
+        }
+    }
 
+    override fun getItemCount(): Int = groupedItems.size
+
+    class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val txtDogName: TextView = view.findViewById(R.id.txtDogHeader)
+    }
+
+    class VaccineViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val txtName: TextView = view.findViewById(R.id.txtVaccineName)
+        val txtDue: TextView = view.findViewById(R.id.txtVaccineDue)
+    }
 }
+
