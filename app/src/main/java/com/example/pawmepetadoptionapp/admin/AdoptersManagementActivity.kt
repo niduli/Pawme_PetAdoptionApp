@@ -1,6 +1,5 @@
 package com.example.pawmepetadoptionapp.admin
 
-
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +9,7 @@ import com.example.pawmepetadoptionapp.R
 import com.example.pawmepetadoptionapp.admin.adapter.AdoptionRequestAdapter
 import com.example.pawmepetadoptionapp.admin.model.AdoptionRequest
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QueryDocumentSnapshot
 
 class AdoptersManagementActivity : AppCompatActivity() {
 
@@ -34,27 +34,61 @@ class AdoptersManagementActivity : AppCompatActivity() {
     }
 
     private fun fetchRequests() {
-        db.collection("adoption_requests")
-            .whereEqualTo("status", "pending")
-            .get()
-            .addOnSuccessListener { snapshot ->
-                requests.clear()
-                for (doc in snapshot.documents) {
-                    val request = doc.toObject(AdoptionRequest::class.java)
-                    if (request != null) {
-                        request.id = doc.id
-                        requests.add(request)
-                    }
+        requests.clear()
+
+        // Step 1: get all dogs
+        db.collection("dogs").get()
+            .addOnSuccessListener { dogSnapshots ->
+                if (dogSnapshots.isEmpty) {
+                    adapter.notifyDataSetChanged()
+                    return@addOnSuccessListener
                 }
-                adapter.notifyDataSetChanged()
+
+                var totalDogs = dogSnapshots.size()
+                var processedDogs = 0
+
+                for (dogDoc in dogSnapshots) {
+                    val dogId = dogDoc.id
+                    val dogName = dogDoc.getString("name") ?: ""
+
+                    // Step 2: for each dog, get its adoption_requests subcollection where status == pending
+                    db.collection("dogs")
+                        .document(dogId)
+                        .collection("adoption_requests")
+                        .whereEqualTo("status", "pending")
+                        .get()
+                        .addOnSuccessListener { requestSnapshots ->
+                            for (reqDoc in requestSnapshots) {
+                                val request = reqDoc.toObject(AdoptionRequest::class.java)
+                                request.id = reqDoc.id
+                                request.dogId = dogId
+                                request.dogName = dogName
+                                requests.add(request)
+                            }
+
+                            processedDogs++
+                            if (processedDogs == totalDogs) {
+                                adapter.notifyDataSetChanged()
+                            }
+                        }
+                        .addOnFailureListener {
+                            processedDogs++
+                            if (processedDogs == totalDogs) {
+                                adapter.notifyDataSetChanged()
+                            }
+                        }
+                }
             }
             .addOnFailureListener {
-                Toast.makeText(this, "Failed to load requests.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Failed to load dogs.", Toast.LENGTH_SHORT).show()
             }
     }
 
     private fun acceptRequest(request: AdoptionRequest) {
-        val requestRef = db.collection("adoption_requests").document(request.id)
+        val requestRef = db.collection("dogs")
+            .document(request.dogId)
+            .collection("adoption_requests")
+            .document(request.id)
         val dogRef = db.collection("dogs").document(request.dogId)
 
         db.runBatch { batch ->
@@ -78,24 +112,44 @@ class AdoptersManagementActivity : AppCompatActivity() {
     }
 
     private fun rejectRequest(request: AdoptionRequest) {
-        val requestRef = db.collection("adoption_requests").document(request.id)
+        val requestRef = db.collection("dogs")
+            .document(request.dogId)
+            .collection("adoption_requests")
+            .document(request.id)
 
+        val dogRef = db.collection("dogs").document(request.dogId)
+
+        // Update request status to rejected
         requestRef.update("status", "rejected")
             .addOnSuccessListener {
-                val notifRef = db.collection("notifications").document()
-                val notifData = mapOf(
-                    "userId" to request.userId,
-                    "message" to "Your adoption request for ${request.dogName} has been rejected.",
-                    "timestamp" to com.google.firebase.Timestamp.now(),
-                    "read" to false
-                )
-                notifRef.set(notifData)
-
-                Toast.makeText(this, "Request rejected.", Toast.LENGTH_SHORT).show()
-                fetchRequests()
+                // Update dog availability to true
+                dogRef.update("available", true)
+                    .addOnSuccessListener {
+                        // Send notification
+                        val notifRef = db.collection("notifications").document()
+                        val notifData = mapOf(
+                            "userId" to request.userId,
+                            "message" to "Your adoption request for ${request.dogName} has been rejected.",
+                            "timestamp" to com.google.firebase.Timestamp.now(),
+                            "read" to false
+                        )
+                        notifRef.set(notifData)
+                            .addOnSuccessListener {
+                                Toast.makeText(this, "Request rejected.", Toast.LENGTH_SHORT).show()
+                                fetchRequests()
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(this, "Failed to send rejection notification.", Toast.LENGTH_SHORT).show()
+                                fetchRequests()
+                            }
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(this, "Failed to update dog availability.", Toast.LENGTH_SHORT).show()
+                    }
             }
             .addOnFailureListener {
                 Toast.makeText(this, "Failed to reject request.", Toast.LENGTH_SHORT).show()
             }
     }
+
 }

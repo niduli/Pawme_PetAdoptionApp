@@ -54,7 +54,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@android:color/holo_red_dark"
+                android:backgroundTint="@android:color/holo_green_dark"
                 android:textColor="#FFFFFF"/>
 
             <Button

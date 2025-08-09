@@ -4,13 +4,15 @@ import com.google.firebase.Timestamp
 
 data class AdoptionRequest(
     var id: String = "",
-    val dogId: String = "",
-    val dogName: String = "",
-    val userId: String = "",
-    val userName: String = "",
-    val phone: String = "",
-    val address: String = "",
-    val hasOtherPets: Boolean = false,
-    val status: String = "",
-    val timestamp: Timestamp? = null
+    var dogId: String = "",
+    var dogName: String = "",
+    var userId: String = "",
+    var userName: String = "",
+    var phone: String = "",
+    var address: String = "",
+    var hasOtherPets: Boolean = false,
+    var experience: String = "",
+    var additionalInformation: String = "",
+    var status: String = "",
+    var timestamp: Timestamp? = null
 )
