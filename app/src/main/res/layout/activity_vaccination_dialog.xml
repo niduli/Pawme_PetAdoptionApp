@@ -9,17 +9,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/etDogName"
-            android:hint="Dog Name"
+        <Spinner
+            android:id="@+id/spinnerDogName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:padding="12dp" />
+            android:layout_marginBottom="8dp"
+            android:prompt="@string/select_dog" />
 
         <EditText
             android:id="@+id/etVaccine"
-            android:hint="Vaccine"
+            android:hint="Vaccine Name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="48dp"
@@ -27,26 +26,25 @@
 
         <EditText
             android:id="@+id/etDate"
-            android:hint="Date"
+            android:hint="Date (YYYY-MM-DD)"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="48dp"
             android:padding="12dp" />
 
-        <EditText
-            android:id="@+id/etDueDate"
-            android:hint="Due Date"
+        <Spinner
+            android:id="@+id/spinnerStatus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:padding="12dp" />
+            android:layout_marginTop="8dp"
+            android:prompt="@string/select_status" />
 
-        <Button
-            android:id="@+id/btnSave"
-            android:text="Save"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp" />
+<!--        <Button-->
+<!--            android:id="@+id/btnSave"-->
+<!--            android:text="Save"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="16dp" />-->
 
     </LinearLayout>
 </ScrollView>

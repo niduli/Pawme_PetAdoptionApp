@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.pawmepetadoptionapp.R
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class ActivityAdminDashboard : AppCompatActivity() {
 
@@ -20,8 +21,6 @@ class ActivityAdminDashboard : AppCompatActivity() {
     private lateinit var tvAdoptersCount: TextView
     private lateinit var tvVaccinationsCount: TextView
 
-
-
     private lateinit var cardUsers: MaterialCardView
     private lateinit var cardDogs: MaterialCardView
     private lateinit var cardDonations: MaterialCardView
@@ -31,10 +30,13 @@ class ActivityAdminDashboard : AppCompatActivity() {
     private lateinit var cardVaccinations: MaterialCardView
 
     private lateinit var btnLogout: Button
+    private lateinit var db: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admin_dashboard)
+
+        // Firebase Authentication - Check logged-in user
         val user = FirebaseAuth.getInstance().currentUser
         if (user != null) {
             val uid = user.uid
@@ -43,9 +45,10 @@ class ActivityAdminDashboard : AppCompatActivity() {
             Log.e("User ID", "No user is logged in")
         }
 
+        // Firestore instance
+        db = FirebaseFirestore.getInstance()
 
-
-        // Initialize count text views
+        // Initialize count TextViews
         tvUsersCount = findViewById(R.id.tvUsersCount)
         tvDogsCount = findViewById(R.id.tvDogsCount)
         tvDonationsCount = findViewById(R.id.tvDonationsCount)
@@ -53,15 +56,6 @@ class ActivityAdminDashboard : AppCompatActivity() {
         tvFostersCount = findViewById(R.id.tvFostersCount)
         tvAdoptersCount = findViewById(R.id.tvAdoptersCount)
         tvVaccinationsCount = findViewById(R.id.tvVaccinationsCount)
-
-        // Set static example data (you can fetch actual Firestore data here)
-        tvUsersCount.text = "20"
-        tvDogsCount.text = "12"
-        tvDonationsCount.text = "10"
-        tvVolunteersCount.text = "8"
-        tvFostersCount.text = "3"
-        tvAdoptersCount.text = "5"
-        tvVaccinationsCount.text = "7"
 
         // Initialize cards
         cardUsers = findViewById(R.id.cardUsers)
@@ -72,14 +66,22 @@ class ActivityAdminDashboard : AppCompatActivity() {
         cardAdopters = findViewById(R.id.cardAdopters)
         cardVaccinations = findViewById(R.id.cardVaccinations)
 
-        // Set click listeners
+        // Fetch counts from Firestore
+        fetchCollectionCount("users", tvUsersCount)
+        fetchCollectionCount("dogs", tvDogsCount)
+        fetchCollectionCount("donations", tvDonationsCount)
+        fetchCollectionCount("volunteers", tvVolunteersCount)
+        fetchCollectionCount("fosters", tvFostersCount)
+        fetchCollectionCount("adopters", tvAdoptersCount)
+        fetchCollectionCount("vaccinations", tvVaccinationsCount)
+
+        // Set click listeners for navigation
         cardUsers.setOnClickListener {
-            // Navigate to user management screen
             startActivity(Intent(this, UserManagementActivity::class.java))
         }
 
         cardDogs.setOnClickListener {
-             startActivity(Intent(this, DogManagementActivity::class.java))
+            startActivity(Intent(this, DogManagementActivity::class.java))
         }
 
         cardDonations.setOnClickListener {
@@ -87,7 +89,7 @@ class ActivityAdminDashboard : AppCompatActivity() {
         }
 
         cardVolunteers.setOnClickListener {
-            // startActivity(Intent(this, VolunteerManagementActivity::class.java))
+             startActivity(Intent(this, AdminVolunteerListActivity::class.java))
         }
 
         cardFosters.setOnClickListener {
@@ -95,20 +97,32 @@ class ActivityAdminDashboard : AppCompatActivity() {
         }
 
         cardAdopters.setOnClickListener {
-            // startActivity(Intent(this, AdopterManagementActivity::class.java))
+             startActivity(Intent(this, AdoptersManagementActivity::class.java))
         }
+
         cardVaccinations.setOnClickListener {
-            // Navigate to vaccination management screen
-             startActivity(Intent(this, ActivityVaccination::class.java))
+            startActivity(Intent(this, ActivityVaccination::class.java))
         }
 
-
-        // Optional: Logout button setup (if added in XML)
+        // Optional: Logout functionality
         // btnLogout = findViewById(R.id.btnLogout)
         // btnLogout.setOnClickListener {
         //     FirebaseAuth.getInstance().signOut()
         //     startActivity(Intent(this, LoginActivity::class.java))
         //     finish()
         // }
+    }
+
+
+    private fun fetchCollectionCount(collectionName: String, textView: TextView) {
+        db.collection(collectionName)
+            .get()
+            .addOnSuccessListener { documents ->
+                textView.text = documents.size().toString()
+            }
+            .addOnFailureListener { e ->
+                Log.e("FirestoreError", "Error fetching count for $collectionName", e)
+                textView.text = "0"
+            }
     }
 }
